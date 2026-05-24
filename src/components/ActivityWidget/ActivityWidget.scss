@@ -1,0 +1,203 @@
+@use '../../styles/variables' as *;
+
+.ww-activity {
+  background: $color-white;
+  border: 1px solid $color-neutral-200;
+  border-radius: $radius-xl;
+  padding: $spacing-5;
+  font-family: $font-family-base;
+
+  &__title {
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+    color: $color-neutral-800;
+    margin: 0 0 $spacing-4;
+  }
+
+  // AI bar
+  &__ai-bar {
+    display: flex;
+    gap: $spacing-2;
+    margin-bottom: $spacing-4;
+  }
+
+  &__ai-input {
+    flex: 1;
+    padding: $spacing-2 $spacing-3;
+    font-size: $font-size-sm;
+    font-family: $font-family-base;
+    border: 1px solid $color-neutral-300;
+    border-radius: $radius-md;
+    color: $color-neutral-800;
+    background: $color-neutral-50;
+    transition: border-color $transition-base, box-shadow $transition-base;
+
+    &::placeholder { color: $color-neutral-400; }
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.15);
+    }
+    &:disabled { opacity: 0.6; cursor: not-allowed; }
+  }
+
+  &__ai-btn {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $color-primary;
+    color: $color-white;
+    border: none;
+    border-radius: $radius-md;
+    font-size: $font-size-md;
+    cursor: pointer;
+    transition: background-color $transition-base;
+
+    &:hover:not(:disabled) { background: $color-primary-hover; }
+    &:disabled { opacity: 0.5; cursor: not-allowed; }
+  }
+
+  // List
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__item {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    grid-template-rows: auto auto;
+    column-gap: $spacing-3;
+    position: relative;
+    padding-bottom: $spacing-4;
+
+    .ww-activity--compact & {
+      padding-bottom: $spacing-2;
+    }
+
+    &:last-child { padding-bottom: 0; }
+
+    // Status colours for the dot
+    &--success .ww-activity__dot { background: $color-success; }
+    &--danger  .ww-activity__dot { background: $color-danger; }
+    &--warning .ww-activity__dot { background: $color-warning; }
+    &--info    .ww-activity__dot { background: $color-info; }
+    &--default .ww-activity__dot { background: $color-neutral-400; }
+
+    .ww-activity--bordered & {
+      border-left: 3px solid $color-neutral-200;
+      padding-left: $spacing-3;
+      grid-template-columns: 1fr;
+      &--success { border-left-color: $color-success; }
+      &--danger  { border-left-color: $color-danger; }
+      &--warning { border-left-color: $color-warning; }
+      &--info    { border-left-color: $color-info; }
+    }
+  }
+
+  &__dot {
+    grid-column: 1;
+    grid-row: 1;
+    width: 12px;
+    height: 12px;
+    border-radius: $radius-full;
+    background: $color-neutral-400;
+    margin-top: 4px;
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    color: $color-white;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+
+  &__line {
+    grid-column: 1;
+    grid-row: 2;
+    width: 2px;
+    background: $color-neutral-200;
+    justify-self: center;
+    height: 100%;
+    min-height: $spacing-3;
+    margin-top: 2px;
+  }
+
+  &__content {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-neutral-800;
+    line-height: $line-height-tight;
+  }
+
+  &__desc {
+    font-size: $font-size-xs;
+    color: $color-neutral-500;
+    line-height: $line-height-normal;
+  }
+
+  &__time {
+    font-size: $font-size-xs;
+    color: $color-neutral-400;
+  }
+
+  // Empty / loading
+  &__empty {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    font-size: $font-size-sm;
+    color: $color-neutral-400;
+    padding: $spacing-4 0;
+    justify-content: center;
+  }
+
+  // Show more / less
+  &__toggle {
+    display: block;
+    margin-top: $spacing-3;
+    font-size: $font-size-xs;
+    color: $color-primary;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-family: $font-family-base;
+    &:hover { text-decoration: underline; }
+  }
+
+  // Spinner
+  &__spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba($color-white, 0.4);
+    border-top-color: $color-white;
+    border-radius: $radius-full;
+    animation: ww-activity-spin 0.6s linear infinite;
+
+    &--lg {
+      width: 20px;
+      height: 20px;
+      border-color: rgba($color-primary, 0.3);
+      border-top-color: $color-primary;
+    }
+  }
+}
+
+@keyframes ww-activity-spin {
+  to { transform: rotate(360deg); }
+}

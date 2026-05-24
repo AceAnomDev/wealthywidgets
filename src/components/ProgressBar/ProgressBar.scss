@@ -1,0 +1,108 @@
+@use '../../styles/variables' as *;
+
+.ww-progress {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  font-family: $font-family-base;
+  width: 100%;
+
+  // === Header row ===
+  &__header {
+    @include flex-between;
+  }
+
+  &__title {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-neutral-700;
+  }
+
+  &__label--top {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: $color-neutral-600;
+  }
+
+  // === Row (track + right label) ===
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+  }
+
+  &__label--right {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: $color-neutral-600;
+    white-space: nowrap;
+    flex-shrink: 0;
+    min-width: 3ch;
+    text-align: right;
+  }
+
+  // === Track ===
+  &__track {
+    flex: 1;
+    background-color: $color-neutral-200;
+    border-radius: $radius-full;
+    overflow: hidden;
+    position: relative;
+
+    // Sizes
+    &--xs { height: 4px; }
+    &--sm { height: 6px; }
+    &--md { height: 8px; }
+    &--lg { height: 12px; }
+  }
+
+  // === Fill ===
+  &__fill {
+    height: 100%;
+    border-radius: $radius-full;
+    transition: width 0.5s ease;
+    position: relative;
+    overflow: hidden;
+
+    // Status colours
+    &--default { background-color: $color-primary; }
+    &--success { background-color: $color-success; }
+    &--warning { background-color: $color-warning; }
+    &--danger  { background-color: $color-danger; }
+    &--info    { background-color: $color-info; }
+
+    // Striped shimmer
+    &--striped::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        transparent 100%
+      );
+      background-size: 200% 100%;
+      animation: ww-progress-shimmer 1.4s infinite;
+    }
+  }
+
+  // === Inside label ===
+  &__label--inside {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: $font-weight-semibold;
+    color: $color-white;
+    line-height: 1;
+    pointer-events: none;
+  }
+}
+
+@keyframes ww-progress-shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}

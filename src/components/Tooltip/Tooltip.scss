@@ -1,0 +1,126 @@
+@use '../../styles/variables' as *;
+
+.ww-tooltip {
+  &__wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &__bubble {
+    position: absolute;
+    z-index: $z-tooltip;
+    padding: $spacing-2 $spacing-3;
+    border-radius: $radius-md;
+    font-family: $font-family-base;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    line-height: $line-height-normal;
+    white-space: nowrap;
+    pointer-events: none;
+    animation: ww-tooltip-in 0.12s ease-out forwards;
+    word-break: break-word;
+
+    // === Variants ===
+    &--dark {
+      background-color: $color-neutral-900;
+      color: $color-white;
+
+      .ww-tooltip__arrow {
+        border-color: $color-neutral-900;
+      }
+    }
+
+    &--light {
+      background-color: $color-white;
+      color: $color-neutral-800;
+      border: 1px solid $color-neutral-200;
+      box-shadow: $shadow-lg;
+
+      .ww-tooltip__arrow { border-color: $color-white; }
+    }
+
+    &--primary {
+      background-color: $color-primary;
+      color: $color-white;
+
+      .ww-tooltip__arrow { border-color: $color-primary; }
+    }
+
+    // === Placements ===
+    &--top {
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    &--bottom {
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    &--left {
+      right: calc(100% + 8px);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &--right {
+      left: calc(100% + 8px);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  // === Arrow ===
+  &__arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+
+    .ww-tooltip__bubble--top & {
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-top-color: inherit;
+      border-bottom: none;
+    }
+
+    .ww-tooltip__bubble--bottom & {
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-bottom-color: inherit;
+      border-top: none;
+    }
+
+    .ww-tooltip__bubble--left & {
+      left: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      border-left-color: inherit;
+      border-right: none;
+    }
+
+    .ww-tooltip__bubble--right & {
+      right: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      border-right-color: inherit;
+      border-left: none;
+    }
+  }
+}
+
+@keyframes ww-tooltip-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}

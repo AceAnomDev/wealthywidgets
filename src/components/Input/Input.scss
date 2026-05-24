@@ -1,0 +1,209 @@
+@use '../../styles/variables' as *;
+
+.ww-input {
+  display: inline-flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  font-family: $font-family-base;
+
+  &--full-width {
+    width: 100%;
+
+    .ww-input__wrapper {
+      width: 100%;
+    }
+  }
+
+  // === Label ===
+  &__label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-neutral-700;
+    line-height: $line-height-tight;
+
+    &-required {
+      color: $color-danger;
+      margin-left: $spacing-1;
+    }
+  }
+
+  // === Wrapper ===
+  &__wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    background-color: $color-white;
+    border: 1px solid $color-neutral-300;
+    border-radius: $radius-md;
+    transition:
+      border-color $transition-base,
+      box-shadow $transition-base;
+
+    &:focus-within {
+      border-color: $color-primary;
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.15);
+    }
+
+    &--disabled {
+      background-color: $color-neutral-50;
+      cursor: not-allowed;
+
+      .ww-input__field {
+        cursor: not-allowed;
+        color: $color-neutral-400;
+      }
+    }
+
+    &--readonly {
+      background-color: $color-neutral-50;
+    }
+
+    // Status variants
+    &--error {
+      border-color: $color-danger;
+
+      &:focus-within {
+        box-shadow: 0 0 0 3px rgba($color-danger, 0.15);
+      }
+    }
+
+    &--success {
+      border-color: $color-success;
+
+      &:focus-within {
+        box-shadow: 0 0 0 3px rgba($color-success, 0.15);
+      }
+    }
+
+    &--warning {
+      border-color: $color-warning;
+
+      &:focus-within {
+        box-shadow: 0 0 0 3px rgba($color-warning, 0.15);
+      }
+    }
+
+    // Sizes
+    &--sm {
+      .ww-input__field {
+        padding: $spacing-1 + 0.125rem $spacing-3;
+        font-size: $font-size-xs;
+      }
+    }
+
+    &--md {
+      .ww-input__field {
+        padding: $spacing-2 $spacing-3;
+        font-size: $font-size-sm;
+      }
+    }
+
+    &--lg {
+      .ww-input__field {
+        padding: $spacing-3 $spacing-4;
+        font-size: $font-size-md;
+      }
+    }
+
+    // Adjust padding when icons present
+    &--has-left .ww-input__field {
+      padding-left: $spacing-8 + $spacing-2;
+    }
+
+    &--has-right .ww-input__field {
+      padding-right: $spacing-8 + $spacing-2;
+    }
+  }
+
+  // === Field ===
+  &__field {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: $font-size-sm;
+    color: $color-neutral-900;
+    line-height: $line-height-normal;
+
+    &::placeholder {
+      color: $color-neutral-400;
+    }
+  }
+
+  // === Icons ===
+  &__left-icon,
+  &__right-element {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    color: $color-neutral-400;
+    pointer-events: none;
+    flex-shrink: 0;
+  }
+
+  &__left-icon {
+    left: $spacing-3;
+  }
+
+  &__right-element {
+    right: $spacing-3;
+    pointer-events: auto; // allow interactive right elements
+  }
+
+  // === Messages ===
+  &__hint {
+    font-size: $font-size-xs;
+    color: $color-neutral-500;
+    line-height: $line-height-normal;
+  }
+
+  &__message {
+    font-size: $font-size-xs;
+    line-height: $line-height-normal;
+    display: flex;
+    align-items: center;
+    gap: $spacing-1;
+
+    &--error   { color: $color-danger; }
+    &--success { color: $color-success; }
+    &--warning { color: $color-warning; }
+    &--default { color: $color-neutral-500; }
+  }
+}
+
+  // AI generation button
+  &__ai-btn {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: #2563eb;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.15s, color 0.15s;
+    padding: 0;
+
+    &:hover:not(:disabled) { background: #dbeafe; }
+    &:disabled { opacity: 0.4; cursor: not-allowed; }
+    &--loading { pointer-events: none; }
+  }
+
+  &__ai-spinner {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(37, 99, 235, 0.25);
+    border-top-color: #2563eb;
+    border-radius: 9999px;
+    animation: ww-input-spin 0.6s linear infinite;
+  }
+
+@keyframes ww-input-spin {
+  to { transform: rotate(360deg); }
+}
