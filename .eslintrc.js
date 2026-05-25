@@ -30,3 +30,12 @@ module.exports = {
   },
   ignorePatterns: ['dist/', 'node_modules/', 'rollup.config.mjs', 'jest.config.js', 'tailwind.config.js'],
 };
+
+overrides: [
+  {
+    files: ['**/*.test.tsx', '**/*.test.ts', '**/*.stories.tsx'],
+    parserOptions: {
+      project: './tsconfig.test.json',
+    },
+  },
+],
