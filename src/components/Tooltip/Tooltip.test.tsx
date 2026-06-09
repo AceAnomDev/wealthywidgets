@@ -4,6 +4,10 @@ import { Tooltip } from './Tooltip';
 jest.useFakeTimers();
 
 describe('Tooltip', () => {
+  afterEach(() => {
+    jest.clearAllTimers();
+  });
+
   it('does not show tooltip initially', () => {
     render(<Tooltip content="Hint"><button>Hover</button></Tooltip>);
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
@@ -46,5 +50,18 @@ describe('Tooltip', () => {
     fireEvent.focus(screen.getByText('Focus').parentElement!);
     act(() => jest.advanceTimersByTime(0));
     expect(screen.getByRole('tooltip')).toBeInTheDocument();
+  });
+
+  // NEW: verify timers are cleared on unmount (no setState-after-unmount warning)
+  it('does not throw on unmount while timer is pending', () => {
+    const { unmount } = render(
+      <Tooltip content="Hint" showDelay={500}><button>Hover</button></Tooltip>,
+    );
+    fireEvent.mouseEnter(screen.getByText('Hover').parentElement!);
+    // unmount before the 500 ms timer fires — should not warn or throw
+    expect(() => {
+      unmount();
+      act(() => jest.advanceTimersByTime(500));
+    }).not.toThrow();
   });
 });

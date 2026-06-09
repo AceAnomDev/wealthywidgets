@@ -60,7 +60,8 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       .filter(Boolean)
       .join(' ');
 
-    const aspectClass = imageAspectRatio.replace('/', '\\/');
+    // FIX: replace '/' with '-' so the CSS class name is valid (e.g. "16-9" not "16\/9")
+    const aspectClass = imageAspectRatio.replace('/', '-');
 
     return (
       <div ref={ref} className={classes} {...rest}>

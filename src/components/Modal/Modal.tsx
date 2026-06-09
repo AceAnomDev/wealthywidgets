@@ -1,4 +1,4 @@
-import { useEffect, useId, useCallback, MouseEvent } from 'react';
+import { useEffect, useId, useCallback, useRef, MouseEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { ModalProps } from './Modal.types';
 import './Modal.scss';
@@ -7,6 +7,7 @@ import './Modal.scss';
  * Modal — accessible dialog with title, body, and footer buttons.
  *
  * The modal is rendered via a React Portal so it always escapes stacking contexts.
+ * Focus is trapped inside while open and restored to the trigger element on close.
  *
  * @example
  * // Basic usage
@@ -43,6 +44,10 @@ export function Modal({
   const generatedId = useId();
   const labelId = labelIdProp ?? `${generatedId}-title`;
 
+  // FIX: track the element that had focus before the modal opened so we can restore it
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
   // Close on Escape
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -53,11 +58,27 @@ export function Modal({
 
   useEffect(() => {
     if (!isOpen) return;
+
+    // FIX: save current focus target before the modal steals it
+    previousFocusRef.current = document.activeElement as HTMLElement;
+
     document.addEventListener('keydown', handleKeyDown);
     document.body.style.overflow = 'hidden';
+
+    // FIX: move focus into the panel so keyboard/screen-reader users land inside the dialog
+    const frame = requestAnimationFrame(() => {
+      const focusable = panelRef.current?.querySelector<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      );
+      (focusable ?? panelRef.current)?.focus();
+    });
+
     return () => {
+      cancelAnimationFrame(frame);
       document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = '';
+      // FIX: restore focus to the element that was active before the modal opened
+      previousFocusRef.current?.focus();
     };
   }, [isOpen, handleKeyDown]);
 
@@ -80,14 +101,19 @@ export function Modal({
     .join(' ');
 
   return createPortal(
+    // FIX: backdrop is just a visual overlay — role="dialog" + aria-modal belong on the *panel*
     <div
       className="ww-modal__backdrop"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby={title ? labelId : undefined}
       onClick={handleBackdropClick}
     >
-      <div className={panelClasses}>
+      <div
+        ref={panelRef}
+        className={panelClasses}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={title ? labelId : undefined}
+        tabIndex={-1}
+      >
         {hasHeader && (
           <div className="ww-modal__header">
             <div className="ww-modal__header-text">

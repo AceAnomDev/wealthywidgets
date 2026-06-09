@@ -64,6 +64,12 @@
     position: relative;
     overflow: hidden;
 
+    // When animated, suppress the CSS transition so it doesn't fight the keyframe animation
+    &--animated {
+      transition: none;
+      animation: ww-progress-fill-in 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+
     // Status colours
     &--default { background-color: $color-primary; }
     &--success { background-color: $color-success; }
@@ -106,3 +112,8 @@
   from { background-position: 200% 0; }
   to   { background-position: -200% 0; }
 }
+
+@keyframes ww-progress-fill-in {
+  from { width: 0% !important; }
+}
+

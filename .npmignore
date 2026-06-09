@@ -5,9 +5,11 @@ __mocks__/
 # Config files
 .eslintrc.js
 jest.config.js
-rollup.config.js
+jest.setup.ts
+rollup.config.mjs
 tailwind.config.js
 tsconfig.json
+tsconfig.test.json
 .github/
 docs/
 
@@ -21,3 +23,8 @@ coverage/
 .gitignore
 .DS_Store
 *.log
+
+# Storybook
+storybook-static/
+.storybook/
+scripts/

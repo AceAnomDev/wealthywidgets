@@ -73,4 +73,36 @@ describe('Dropdown', () => {
     render(<Dropdown options={options} disabled />);
     expect(screen.getByRole('button')).toBeDisabled();
   });
+
+  // NEW: tag-remove must be keyboard accessible
+  it('tag-remove has tabIndex and keyboard handler', () => {
+    render(
+      <Dropdown
+        options={options}
+        multiple
+        value={['a', 'b']}
+        onChange={jest.fn()}
+      />,
+    );
+    const removeButtons = screen.getAllByRole('button', { name: /Remove/ });
+    expect(removeButtons.length).toBeGreaterThan(0);
+    removeButtons.forEach((btn) => {
+      expect(btn).toHaveAttribute('tabindex', '0');
+    });
+  });
+
+  it('removes tag on Enter key', () => {
+    const onChange = jest.fn();
+    render(
+      <Dropdown
+        options={options}
+        multiple
+        value={['a', 'b']}
+        onChange={onChange}
+      />,
+    );
+    const removeAlpha = screen.getByLabelText('Remove Alpha');
+    fireEvent.keyDown(removeAlpha, { key: 'Enter' });
+    expect(onChange).toHaveBeenCalledWith(['b']);
+  });
 });

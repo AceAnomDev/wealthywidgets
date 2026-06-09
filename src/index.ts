@@ -32,3 +32,9 @@ export type { WeatherWidgetProps, WeatherCondition, WeatherForecastDay, Temperat
 
 export { CodeWidget } from './components/CodeWidget';
 export type { CodeWidgetProps, CodeLanguage } from './components/CodeWidget';
+
+export { Badge } from './components/Badge';
+export type { BadgeProps, BadgeVariant, BadgeSize } from './components/Badge';
+
+export { ToastProvider, useToast } from './components/Toast';
+export type { ToastItem, ToastContextValue, ToastProviderProps, ToastVariant, ToastPosition } from './components/Toast';

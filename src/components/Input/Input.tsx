@@ -119,12 +119,16 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               className={['ww-input__ai-btn', aiLoading ? 'ww-input__ai-btn--loading' : ''].filter(Boolean).join(' ')}
               onClick={() => {
                 const val = typeof rest.value === 'string' ? rest.value : '';
-                void onAiGenerate(val).then((result) => {
-                  if (result && rest.onChange) {
-                    const synth = { target: { value: result } } as React.ChangeEvent<HTMLInputElement>;
-                    rest.onChange(synth);
-                  }
-                });
+                void onAiGenerate(val)
+                  .then((result) => {
+                    if (result && rest.onChange) {
+                      const synth = { target: { value: result } } as React.ChangeEvent<HTMLInputElement>;
+                      rest.onChange(synth);
+                    }
+                  })
+                  .catch(() => {
+                    // Errors are handled by the parent via aiLoading / status props
+                  });
               }}
               disabled={aiLoading || disabled}
               aria-label="Generate with AI"

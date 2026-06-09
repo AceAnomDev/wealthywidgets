@@ -18,7 +18,10 @@
     line-height: $line-height-normal;
     white-space: nowrap;
     pointer-events: none;
-    animation: ww-tooltip-in 0.12s ease-out forwards;
+    // animation set per-placement below to avoid transform conflict
+    animation-duration: 0.12s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
     word-break: break-word;
 
     // === Variants ===
@@ -52,24 +55,28 @@
       bottom: calc(100% + 8px);
       left: 50%;
       transform: translateX(-50%);
+      animation-name: ww-tooltip-in-top-bottom;
     }
 
     &--bottom {
       top: calc(100% + 8px);
       left: 50%;
       transform: translateX(-50%);
+      animation-name: ww-tooltip-in-top-bottom;
     }
 
     &--left {
       right: calc(100% + 8px);
       top: 50%;
       transform: translateY(-50%);
+      animation-name: ww-tooltip-in-left-right;
     }
 
     &--right {
       left: calc(100% + 8px);
       top: 50%;
       transform: translateY(-50%);
+      animation-name: ww-tooltip-in-left-right;
     }
   }
 
@@ -114,13 +121,12 @@
   }
 }
 
-@keyframes ww-tooltip-in {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) scale(1);
-  }
+@keyframes ww-tooltip-in-top-bottom {
+  from { opacity: 0; transform: translateX(-50%) scale(0.92); }
+  to   { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+
+@keyframes ww-tooltip-in-left-right {
+  from { opacity: 0; transform: translateY(-50%) scale(0.92); }
+  to   { opacity: 1; transform: translateY(-50%) scale(1); }
 }

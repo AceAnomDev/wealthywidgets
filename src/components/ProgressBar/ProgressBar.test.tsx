@@ -41,4 +41,15 @@ describe('ProgressBar', () => {
     render(<ProgressBar value={40} max={200} showLabel formatLabel={(v, m) => `${v}/${m}`} labelPosition="right" />);
     expect(screen.getByText('40/200')).toBeInTheDocument();
   });
+
+  // NEW: animated prop must apply the CSS class
+  it('applies animated class when animated=true', () => {
+    render(<ProgressBar value={60} animated />);
+    expect(document.querySelector('.ww-progress__fill--animated')).toBeInTheDocument();
+  });
+
+  it('does not apply animated class by default', () => {
+    render(<ProgressBar value={60} />);
+    expect(document.querySelector('.ww-progress__fill--animated')).not.toBeInTheDocument();
+  });
 });

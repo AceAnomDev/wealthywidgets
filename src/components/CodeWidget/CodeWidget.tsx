@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { CodeWidgetProps } from './CodeWidget.types';
 import './CodeWidget.scss';
 
@@ -16,7 +16,7 @@ import './CodeWidget.scss';
  * />
  *
  * @example
- * // Editable code pad
+ * // Editable code pad with auto-growing textarea
  * <CodeWidget
  *   language="python"
  *   code={code}
@@ -54,12 +54,13 @@ export function CodeWidget({
   const [prompt, setPrompt] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
   const handleCopy = useCallback(async () => {
     if (!code) return;
     await navigator.clipboard.writeText(code);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    copyTimerRef.current = setTimeout(() => setCopied(false), 2000);
   }, [code]);
 
   const handleAiSubmit = async () => {
@@ -72,6 +73,17 @@ export function CodeWidget({
       setAiLoading(false);
     }
   };
+
+  // FIX: auto-resize the textarea to fit its content whenever code changes
+  useEffect(() => {
+    if (!editable || !textareaRef.current) return;
+    const el = textareaRef.current;
+    el.style.height = 'auto';
+    el.style.height = `${el.scrollHeight}px`;
+  }, [code, editable]);
+
+  // Clean up copy timer on unmount
+  useEffect(() => () => clearTimeout(copyTimerRef.current), []);
 
   const busy = loading || aiLoading;
   const lines = code.split('\n');
@@ -92,6 +104,7 @@ export function CodeWidget({
           <span className="ww-code__lang-badge">{language}</span>
           {showCopy && code && (
             <button
+              type="button"
               className="ww-code__copy-btn"
               onClick={() => { void handleCopy(); }}
               aria-label="Copy code"
@@ -117,11 +130,13 @@ export function CodeWidget({
             aria-label="AI code generation prompt"
           />
           <button
+            type="button"
             className="ww-code__ai-btn"
             onClick={() => { void handleAiSubmit(); }}
             disabled={!prompt.trim() || busy}
+            aria-label={aiLoading ? 'Generating…' : 'Generate code'}
           >
-            {aiLoading ? <span className="ww-code__spinner" /> : 'Generate'}
+            {aiLoading ? <span className="ww-code__spinner" aria-hidden="true" /> : 'Generate'}
           </button>
         </div>
       )}
@@ -134,6 +149,7 @@ export function CodeWidget({
             <span>Generating code…</span>
           </div>
         ) : editable ? (
+          // FIX: overflow-y hidden + auto height via useEffect so the textarea grows with content
           <textarea
             ref={textareaRef}
             className="ww-code__textarea"
@@ -141,6 +157,7 @@ export function CodeWidget({
             onChange={(e) => onChange?.(e.target.value)}
             spellCheck={false}
             aria-label={title ?? 'Editable code'}
+            style={{ overflowY: 'hidden', resize: 'none' }}
           />
         ) : (
           <table className="ww-code__table" aria-label={title ?? 'Code block'}>
@@ -150,7 +167,7 @@ export function CodeWidget({
                 const highlighted = highlightLines.includes(lineNum);
                 return (
                   <tr
-                    key={i}
+                    key={`line-${i}`}
                     className={['ww-code__row', highlighted ? 'ww-code__row--highlighted' : '']
                       .filter(Boolean)
                       .join(' ')}

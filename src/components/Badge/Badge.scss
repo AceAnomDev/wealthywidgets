@@ -1,0 +1,54 @@
+.ww-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  border-radius: 4px;
+
+  // Sizes
+  &--sm { font-size: 0.65rem; padding: 2px 6px; }
+  &--md { font-size: 0.75rem; padding: 3px 8px; }
+  &--lg { font-size: 0.85rem; padding: 4px 10px; }
+
+  // Pill shape
+  &--pill { border-radius: 9999px; }
+
+  // Variants
+  &--default { background: #e5e7eb; color: #374151; }
+  &--primary { background: #eff6ff; color: #1d4ed8; }
+  &--success { background: #dcfce7; color: #15803d; }
+  &--warning { background: #fef9c3; color: #a16207; }
+  &--danger  { background: #fee2e2; color: #b91c1c; }
+  &--info    { background: #e0f2fe; color: #0369a1; }
+
+  // Dot wrapper mode
+  &--dot-wrapper {
+    position: relative;
+    display: inline-flex;
+    background: transparent !important;
+    padding: 0 !important;
+    color: inherit !important;
+  }
+}
+
+.ww-badge__dot {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border-radius: 9999px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fff;
+  pointer-events: none;
+}

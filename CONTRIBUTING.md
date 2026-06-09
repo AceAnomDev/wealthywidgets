@@ -28,9 +28,9 @@ wealthywidgets/
 │   └── index.ts                    # Public API
 ├── .github/
 │   └── workflows/
-│       ├── ci.yml                  # Lint + test + build
-│       └── publish.yml             # npm publish on release
-└── docs/                           # Additional documentation
+│       └── ci.yml                  # Type check, test, build on every push/PR
+├── docs/                           # Storybook static site (GitHub Pages)
+└── ...
 ```
 
 ## Adding a new widget
@@ -53,6 +53,7 @@ wealthywidgets/
 - [ ] SCSS uses variables from `_variables.scss`
 - [ ] Tests cover happy path, edge cases, and accessibility
 - [ ] JSDoc `@example` blocks in the component file
+- [ ] Storybook stories covering Default, variants, and edge cases
 
 ## Scripts
 
@@ -65,6 +66,7 @@ wealthywidgets/
 | `npm run lint`       | ESLint                         |
 | `npm run lint:fix`   | ESLint with auto-fix           |
 | `npm run type-check` | TypeScript type check          |
+| `npm run storybook`  | *(requires separate: `npm install storybook @storybook/react-vite`)* |
 
 ## Commit conventions
 

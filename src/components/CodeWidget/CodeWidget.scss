@@ -187,7 +187,8 @@
     font-size: $font-size-sm;
     line-height: 1.6;
     padding: $spacing-4;
-    resize: vertical;
+    resize: none; // controlled programmatically via auto-resize in CodeWidget.tsx
+    box-sizing: border-box;
     caret-color: #60a5fa;
 
     &:focus { outline: none; }

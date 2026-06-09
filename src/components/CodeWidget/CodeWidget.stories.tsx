@@ -101,20 +101,22 @@ export const SQL: Story = {
   },
 };
 
+function EditableStory() {
+  const [code, setCode] = useState(pySnippet);
+  return (
+    <CodeWidget
+      title="Edit me"
+      language="python"
+      code={code}
+      editable
+      onChange={setCode}
+      maxHeight="300px"
+    />
+  );
+}
+
 export const Editable: Story = {
-  render: () => {
-    const [code, setCode] = useState(pySnippet);
-    return (
-      <CodeWidget
-        title="Edit me"
-        language="python"
-        code={code}
-        editable
-        onChange={setCode}
-        maxHeight="300px"
-      />
-    );
-  },
+  render: () => <EditableStory />,
 };
 
 export const WithAiBar: Story = {

@@ -1,10 +1,13 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { Modal } from './Modal';
+
+jest.useFakeTimers();
 
 const defaultProps = { isOpen: true, onClose: jest.fn() };
 
 describe('Modal', () => {
   beforeEach(() => jest.clearAllMocks());
+  afterEach(() => jest.clearAllTimers());
 
   it('renders when open', () => {
     render(<Modal {...defaultProps} title="Hello">Content</Modal>);
@@ -49,5 +52,22 @@ describe('Modal', () => {
   it('renders description', () => {
     render(<Modal {...defaultProps} title="T" description="Subtitle here" />);
     expect(screen.getByText('Subtitle here')).toBeInTheDocument();
+  });
+
+  // NEW: role="dialog" must be on the panel, not the backdrop
+  it('dialog role is on the panel element, not the backdrop', () => {
+    render(<Modal {...defaultProps} title="T" />);
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveClass('ww-modal__panel');
+    expect(dialog).not.toHaveClass('ww-modal__backdrop');
+  });
+
+  // NEW: focus management
+  it('moves focus into the dialog when opened', () => {
+    render(<Modal isOpen onClose={jest.fn()} title="T" />);
+    // flush requestAnimationFrame in jsdom
+    act(() => { jest.runAllTimers(); });
+    const dialog = document.querySelector('.ww-modal__panel') as HTMLElement;
+    expect(document.activeElement === dialog || dialog.contains(document.activeElement)).toBe(true);
   });
 });

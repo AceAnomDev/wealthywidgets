@@ -112,6 +112,7 @@ export function WeatherWidget({
             aria-label="AI weather prompt"
           />
           <button
+            type="button"
             className="ww-weather__ai-btn"
             onClick={() => { void handleAiSubmit(); }}
             disabled={!prompt.trim() || busy}

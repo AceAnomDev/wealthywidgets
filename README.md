@@ -5,6 +5,7 @@
 **A production-ready React component library with AI-powered generation built in.**
 
 [![CI](https://github.com/AceAnomDev/wealthywidgets/actions/workflows/ci.yml/badge.svg)](https://github.com/AceAnomDev/wealthywidgets/actions/workflows/ci.yml)
+[![Storybook](https://img.shields.io/badge/Storybook-live-ff4785?logo=storybook&logoColor=white)](https://aceanomdev.github.io/wealthywidgets/)
 [![npm version](https://img.shields.io/npm/v/wealthywidgets.svg)](https://www.npmjs.com/package/wealthywidgets)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.x-blue.svg)](https://www.typescriptlang.org/)
@@ -27,6 +28,10 @@
 | `ActivityWidget` | Scrollable event timeline with live AI feed generation               |     ✦      |
 | `WeatherWidget`  | Current conditions + 7-day forecast card with AI data generation     |     ✦      |
 | `CodeWidget`     | Syntax-highlighted code block with editing and AI snippet generation |     ✦      |
+| `Badge`          | Compact status/category label with dot indicator for notifications   |            |
+| `Toast`          | `ToastProvider` + `useToast` hook for app-wide toast notifications   |            |
+
+> 📖 **[Live Storybook →](https://aceanomdev.github.io/wealthywidgets/)** — deploy `docs/` via GitHub Pages: Settings → Pages → Source: Deploy from branch → `/docs`
 
 Every widget is:
 
@@ -490,6 +495,107 @@ export function useCounter(initial = 0) {
 
 ---
 
+### Badge
+
+Compact label for status, category, or notification count indicators.
+
+```tsx
+import { Badge } from 'wealthywidgets';
+
+// Status label
+<Badge variant="success">Active</Badge>
+<Badge variant="danger" pill>Critical</Badge>
+<Badge variant="warning" size="sm">Beta</Badge>
+
+// Dot indicator on an icon
+<Badge dot count={5}>
+  <BellIcon />
+</Badge>
+
+// Cap at max
+<Badge dot count={150} max={99}>
+  <BellIcon />
+</Badge>
+```
+
+| Prop      | Type           | Default     | Description                                    |
+| --------- | -------------- | ----------- | ---------------------------------------------- |
+| `variant` | `BadgeVariant` | `'default'` | `default` · `primary` · `success` · `warning` · `danger` · `info` |
+| `size`    | `BadgeSize`    | `'md'`      | `'sm'` · `'md'` · `'lg'`                      |
+| `pill`    | `boolean`      | `false`     | Fully rounded (capsule) shape                  |
+| `dot`     | `boolean`      | `false`     | Render as notification dot wrapper             |
+| `count`   | `number`       | —           | Number shown in the dot indicator              |
+| `max`     | `number`       | `99`        | Cap value — displays `{max}+` when exceeded    |
+
+---
+
+### Toast
+
+App-wide toast notifications via React Context. Wrap your app once with `<ToastProvider>`, then call `useToast()` anywhere inside.
+
+```tsx
+import { ToastProvider, useToast } from 'wealthywidgets';
+
+// 1. Wrap your app (once, at the root)
+function App() {
+  return (
+    <ToastProvider position="top-right" defaultDuration={4000}>
+      <YourApp />
+    </ToastProvider>
+  );
+}
+
+// 2. Call from any component
+function SaveButton() {
+  const { toast, dismiss, dismissAll } = useToast();
+
+  const handleSave = async () => {
+    try {
+      await save();
+      toast({ message: 'Changes saved!', variant: 'success' });
+    } catch {
+      toast({
+        title: 'Save failed',
+        message: 'Please try again.',
+        variant: 'danger',
+        duration: 0, // stays until manually dismissed
+      });
+    }
+  };
+
+  return <Button onClick={handleSave}>Save</Button>;
+}
+```
+
+**`ToastProvider` props:**
+
+| Prop              | Type            | Default       | Description                             |
+| ----------------- | --------------- | ------------- | --------------------------------------- |
+| `position`        | `ToastPosition` | `'top-right'` | Screen position for the toast stack     |
+| `defaultDuration` | `number`        | `4000`        | Auto-dismiss delay in ms. `0` = manual  |
+
+**`toast()` options:**
+
+| Field      | Type           | Default     | Description                                    |
+| ---------- | -------------- | ----------- | ---------------------------------------------- |
+| `message`  | `ReactNode`    | —           | Toast body (required)                          |
+| `title`    | `string`       | —           | Bold heading above the message                 |
+| `variant`  | `ToastVariant` | `'default'` | `default` · `success` · `warning` · `danger` · `info` |
+| `duration` | `number`       | —           | Override default duration. `0` = no auto-dismiss |
+| `icon`     | `ReactNode`    | —           | Replace the default variant icon               |
+
+**`useToast()` returns:**
+
+| Method       | Signature                | Description              |
+| ------------ | ------------------------ | ------------------------ |
+| `toast`      | `(item) => string`       | Show a toast, returns id |
+| `dismiss`    | `(id: string) => void`   | Dismiss one toast by id  |
+| `dismissAll` | `() => void`             | Dismiss all toasts       |
+
+**Available positions:** `top-right` · `top-left` · `top-center` · `bottom-right` · `bottom-left` · `bottom-center`
+
+---
+
 ## 🎨 Customisation
 
 ### SCSS variables
@@ -504,17 +610,6 @@ $font-family-base: 'Geist', sans-serif;
 $radius-md: 0.5rem;
 
 @use 'wealthywidgets/src/styles/variables' as *;
-```
-
-### CSS custom properties
-
-All colour tokens are available as CSS variables in the distributed stylesheet:
-
-```css
-:root {
-  --ww-color-primary: #7c3aed;
-  --ww-radius-md: 0.5rem;
-}
 ```
 
 ---
@@ -559,6 +654,12 @@ npm test
 
 # Watch mode
 npm run test -- --watch
+
+# Run Storybook locally
+npm run storybook
+
+# Build Storybook into docs/ (then commit and push)
+npm run build-storybook
 ```
 
 ### Project structure
@@ -566,16 +667,18 @@ npm run test -- --watch
 ```
 src/
 ├── components/
+│   ├── ActivityWidget/
+│   ├── Badge/
 │   ├── Button/
 │   ├── Card/
+│   ├── CodeWidget/
 │   ├── Dropdown/
 │   ├── Input/
 │   ├── Modal/
 │   ├── ProgressBar/
+│   ├── Toast/
 │   ├── Tooltip/
-│   ├── ActivityWidget/   ← new
-│   ├── WeatherWidget/    ← new
-│   └── CodeWidget/       ← new
+│   └── WeatherWidget/
 ├── styles/
 │   └── _variables.scss
 └── index.ts

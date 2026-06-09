@@ -2,6 +2,7 @@ import {
   useState,
   useRef,
   useEffect,
+  useLayoutEffect,
   useCallback,
   KeyboardEvent,
   useId,
@@ -120,10 +121,11 @@ export function Dropdown({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [handleClickOutside]);
 
-  // Focus search when menu opens
-  useEffect(() => {
+  // FIX: use useLayoutEffect instead of setTimeout so focus lands synchronously
+  // after the DOM is painted — no arbitrary magic-number delay needed
+  useLayoutEffect(() => {
     if (open && searchable) {
-      setTimeout(() => searchRef.current?.focus(), 50);
+      searchRef.current?.focus();
     }
     if (!open) setQuery('');
   }, [open, searchable]);
@@ -164,11 +166,20 @@ export function Dropdown({
             selectedValues.map((val) => (
               <span key={val} className="ww-dropdown__tag">
                 <span className="ww-dropdown__tag-label">{getLabel(val)}</span>
+                {/* FIX: add tabIndex + onKeyDown so tag-remove is keyboard accessible */}
                 <span
                   className="ww-dropdown__tag-remove"
                   role="button"
+                  tabIndex={0}
                   aria-label={`Remove ${getLabel(val)}`}
                   onClick={(e) => handleRemoveTag(val, e)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Backspace') {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onChange?.(selectedValues.filter((v) => v !== val));
+                    }
+                  }}
                 >
                   ✕
                 </span>

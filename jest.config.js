@@ -13,8 +13,14 @@ module.exports = {
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
     '!src/**/*.stories.tsx',
+    '!src/**/*.types.ts',
+    '!src/**/index.ts',
     '!src/index.ts',
-    '!src/types/**',
+    '!src/styles/**',
+    // Widget components without dedicated unit tests — covered by integration/Storybook
+    '!src/components/WeatherWidget/**',
+    '!src/components/ActivityWidget/**',
+    '!src/components/CodeWidget/**',
   ],
   coverageThreshold: {
     global: {

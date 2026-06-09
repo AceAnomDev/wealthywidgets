@@ -94,6 +94,7 @@ export function ActivityWidget({
             aria-label="AI generation prompt"
           />
           <button
+            type="button"
             className="ww-activity__ai-btn"
             onClick={() => { void handleAiSubmit(); }}
             disabled={!prompt.trim() || aiLoading || loading}
@@ -115,7 +116,7 @@ export function ActivityWidget({
         <ol className="ww-activity__list" aria-label={title}>
           {visible.map((item: ActivityItem, idx) => (
             <li
-              key={item.id}
+              key={`item-${item.id}`}
               className={[
                 'ww-activity__item',
                 item.status ? `ww-activity__item--${item.status}` : '',
@@ -147,6 +148,7 @@ export function ActivityWidget({
 
       {hasMore && (
         <button
+          type="button"
           className="ww-activity__toggle"
           onClick={() => setExpanded((v) => !v)}
         >

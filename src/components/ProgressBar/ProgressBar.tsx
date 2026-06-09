@@ -15,6 +15,10 @@ import './ProgressBar.scss';
  * @example
  * // Striped loading bar
  * <ProgressBar value={40} status="info" striped showLabel labelPosition="right" />
+ *
+ * @example
+ * // Animated fill on mount
+ * <ProgressBar value={70} animated />
  */
 export function ProgressBar({
   value,
@@ -26,6 +30,8 @@ export function ProgressBar({
   formatLabel,
   title,
   striped = false,
+  // FIX: animated prop was declared in types but never applied — now wires up the CSS modifier
+  animated = false,
   ariaLabel,
   className = '',
 }: ProgressBarProps) {
@@ -42,6 +48,8 @@ export function ProgressBar({
     'ww-progress__fill',
     `ww-progress__fill--${status}`,
     striped ? 'ww-progress__fill--striped' : '',
+    // FIX: wire up the animated prop to the CSS modifier class
+    animated ? 'ww-progress__fill--animated' : '',
   ]
     .filter(Boolean)
     .join(' ');

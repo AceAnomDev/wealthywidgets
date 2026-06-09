@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WealthyWidgets — Component Examples</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #7c3aed;
+      --primary-hover: #6d28d9;
+      --primary-light: #ede9fe;
+      --secondary: #6b7280;
+      --secondary-hover: #4b5563;
+      --success: #16a34a;
+      --success-light: #dcfce7;
+      --warning: #d97706;
+      --warning-light: #fef9c3;
+      --danger: #dc2626;
+      --danger-light: #fee2e2;
+      --info: #0284c7;
+      --info-light: #e0f2fe;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --radius: 8px;
+      --radius-sm: 4px;
+      --radius-lg: 12px;
+      --radius-full: 9999px;
+      --shadow: 0 1px 3px rgba(0,0,0,.1), 0 1px 2px rgba(0,0,0,.06);
+      --shadow-md: 0 4px 6px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.06);
+      --shadow-lg: 0 10px 15px rgba(0,0,0,.1), 0 4px 6px rgba(0,0,0,.05);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 15px;
+      color: var(--gray-800);
+      background: var(--gray-50);
+      line-height: 1.6;
+    }
+
+    /* ── Layout ── */
+    .layout { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      background: #fff;
+      border-right: 1px solid var(--gray-200);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 24px 0;
+    }
+
+    .sidebar-logo {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid var(--gray-200);
+      margin-bottom: 12px;
+    }
+    .sidebar-logo h1 { font-size: 16px; font-weight: 700; color: var(--primary); }
+    .sidebar-logo p  { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+
+    .sidebar-section { padding: 8px 20px 4px; font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .08em; color: var(--gray-400); }
+
+    .sidebar a {
+      display: block; padding: 7px 20px; font-size: 14px; color: var(--gray-600);
+      text-decoration: none; border-radius: 0; transition: all .15s;
+    }
+    .sidebar a:hover { background: var(--gray-50); color: var(--gray-900); }
+    .sidebar a.active { background: var(--primary-light); color: var(--primary); font-weight: 500; }
+
+    .main { flex: 1; padding: 48px; max-width: 900px; }
+
+    /* ── Page header ── */
+    .page-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 1px solid var(--gray-200); }
+    .page-header h2 { font-size: 28px; font-weight: 700; color: var(--gray-900); }
+    .page-header p  { margin-top: 8px; color: var(--gray-500); font-size: 15px; }
+
+    /* ── Section ── */
+    .section { margin-bottom: 48px; }
+    .section-title {
+      font-size: 13px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .06em; color: var(--gray-400); margin-bottom: 16px;
+    }
+
+    /* ── Example block ── */
+    .example {
+      background: #fff; border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 16px;
+    }
+    .example-label {
+      padding: 10px 16px; font-size: 12px; font-weight: 500;
+      color: var(--gray-500); background: var(--gray-50);
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .example-preview {
+      padding: 32px 24px; display: flex; flex-wrap: wrap;
+      gap: 12px; align-items: flex-start;
+    }
+    .example-preview.center { justify-content: center; }
+    .example-preview.column { flex-direction: column; }
+    .example-preview.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* ── Code block ── */
+    .code-block {
+      background: var(--gray-900); border-radius: var(--radius);
+      padding: 16px 20px; margin-top: 8px; overflow-x: auto;
+    }
+    .code-block code {
+      font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+      font-size: 13px; color: #e5e7eb; line-height: 1.7;
+    }
+    .code-block .kw  { color: #c084fc; }
+    .code-block .str { color: #86efac; }
+    .code-block .tag { color: #67e8f9; }
+    .code-block .attr{ color: #fde68a; }
+    .code-block .cmt { color: #6b7280; }
+
+    /* ── Install banner ── */
+    .install-banner {
+      background: linear-gradient(135deg, var(--primary) 0%, #5b21b6 100%);
+      color: #fff; border-radius: var(--radius-lg); padding: 32px 36px; margin-bottom: 48px;
+    }
+    .install-banner h2 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+    .install-banner p  { opacity: .85; margin-bottom: 20px; }
+    .install-cmd {
+      background: rgba(0,0,0,.25); border-radius: var(--radius);
+      padding: 12px 16px; font-family: monospace; font-size: 14px;
+      display: inline-block; letter-spacing: .02em;
+    }
+
+    /* ── Prop table ── */
+    .prop-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    .prop-table th {
+      text-align: left; padding: 8px 12px; background: var(--gray-50);
+      border-bottom: 2px solid var(--gray-200); font-weight: 600; color: var(--gray-700);
+    }
+    .prop-table td { padding: 8px 12px; border-bottom: 1px solid var(--gray-100); vertical-align: top; }
+    .prop-table tr:last-child td { border-bottom: none; }
+    .prop-table code { background: var(--gray-100); padding: 1px 5px; border-radius: 3px; font-size: 12px; font-family: monospace; }
+
+    /* ── Page visibility ── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ─────────────────────────── COMPONENTS ─────────────────────────── */
+
+    /* Button */
+    .ww-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 6px; font-size: 14px; font-weight: 500; border: none; cursor: pointer;
+      border-radius: var(--radius); transition: all .15s; white-space: nowrap;
+      padding: 8px 16px; line-height: 1.4; text-decoration: none;
+    }
+    .ww-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .ww-btn--primary   { background: var(--primary);   color: #fff; }
+    .ww-btn--primary:hover:not(:disabled) { background: var(--primary-hover); }
+    .ww-btn--secondary { background: var(--gray-100);  color: var(--gray-700); }
+    .ww-btn--secondary:hover:not(:disabled) { background: var(--gray-200); }
+    .ww-btn--outline   { background: transparent; color: var(--primary); border: 1.5px solid var(--primary); }
+    .ww-btn--outline:hover:not(:disabled) { background: var(--primary-light); }
+    .ww-btn--ghost     { background: transparent; color: var(--gray-600); }
+    .ww-btn--ghost:hover:not(:disabled) { background: var(--gray-100); }
+    .ww-btn--danger    { background: var(--danger); color: #fff; }
+    .ww-btn--danger:hover:not(:disabled) { background: #b91c1c; }
+    .ww-btn--success   { background: var(--success); color: #fff; }
+    .ww-btn--success:hover:not(:disabled) { background: #15803d; }
+    .ww-btn--xs { font-size: 11px; padding: 4px 10px; }
+    .ww-btn--sm { font-size: 13px; padding: 6px 12px; }
+    .ww-btn--lg { font-size: 15px; padding: 10px 20px; }
+    .ww-btn--xl { font-size: 16px; padding: 12px 24px; }
+    .ww-btn--rounded { border-radius: var(--radius-full); }
+    .ww-btn--full    { width: 100%; }
+    .ww-btn--loading { position: relative; color: transparent !important; }
+    .ww-btn--loading::after {
+      content: ''; position: absolute; width: 14px; height: 14px;
+      border: 2px solid currentColor; border-top-color: transparent;
+      border-radius: 50%; animation: spin .6s linear infinite; opacity: 1; color: #fff;
+    }
+
+    /* Badge */
+    .ww-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 500; padding: 3px 8px;
+      border-radius: var(--radius-sm); white-space: nowrap;
+    }
+    .ww-badge--pill { border-radius: var(--radius-full); }
+    .ww-badge--sm { font-size: 10px; padding: 2px 6px; }
+    .ww-badge--lg { font-size: 14px; padding: 4px 10px; }
+    .ww-badge--default { background: var(--gray-200);    color: var(--gray-700); }
+    .ww-badge--primary { background: var(--primary-light); color: var(--primary); }
+    .ww-badge--success { background: var(--success-light); color: var(--success); }
+    .ww-badge--warning { background: var(--warning-light); color: var(--warning); }
+    .ww-badge--danger  { background: var(--danger-light);  color: var(--danger); }
+    .ww-badge--info    { background: var(--info-light);    color: var(--info); }
+
+    /* Input */
+    .ww-field { display: flex; flex-direction: column; gap: 5px; width: 100%; max-width: 360px; }
+    .ww-label { font-size: 13px; font-weight: 500; color: var(--gray-700); }
+    .ww-label--required::after { content: ' *'; color: var(--danger); }
+    .ww-input-wrap { position: relative; display: flex; align-items: center; }
+    .ww-input {
+      width: 100%; padding: 8px 12px; border: 1.5px solid var(--gray-300);
+      border-radius: var(--radius); font-size: 14px; color: var(--gray-800);
+      background: #fff; transition: border-color .15s, box-shadow .15s; outline: none;
+    }
+    .ww-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(124,58,237,.12); }
+    .ww-input:disabled { background: var(--gray-50); color: var(--gray-400); cursor: not-allowed; }
+    .ww-input--error  { border-color: var(--danger); }
+    .ww-input--error:focus { box-shadow: 0 0 0 3px rgba(220,38,38,.12); }
+    .ww-input--success{ border-color: var(--success); }
+    .ww-hint  { font-size: 12px; color: var(--gray-400); }
+    .ww-msg   { font-size: 12px; }
+    .ww-msg--error   { color: var(--danger); }
+    .ww-msg--success { color: var(--success); }
+
+    /* Card */
+    .ww-card {
+      background: #fff; border-radius: var(--radius-lg);
+      border: 1px solid var(--gray-200); overflow: hidden;
+      transition: box-shadow .15s, transform .15s;
+    }
+    .ww-card--elevated { box-shadow: var(--shadow-md); border-color: transparent; }
+    .ww-card--outlined { border-color: var(--gray-300); }
+    .ww-card--clickable { cursor: pointer; }
+    .ww-card--clickable:hover { box-shadow: var(--shadow-lg); transform: translateY(-1px); }
+    .ww-card__img { width: 100%; object-fit: cover; display: block; aspect-ratio: 16/9; }
+    .ww-card__body { padding: 20px; }
+    .ww-card__title { font-size: 16px; font-weight: 600; color: var(--gray-900); margin-bottom: 4px; }
+    .ww-card__sub   { font-size: 12px; color: var(--gray-400); margin-bottom: 8px; }
+    .ww-card__desc  { font-size: 14px; color: var(--gray-500); line-height: 1.55; margin-bottom: 16px; }
+    .ww-card__actions { display: flex; gap: 8px; }
+
+    /* Modal */
+    .ww-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,.5);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1000; padding: 16px;
+    }
+    .ww-backdrop.hidden { display: none; }
+    .ww-modal {
+      background: #fff; border-radius: var(--radius-lg); width: 100%; max-width: 480px;
+      box-shadow: var(--shadow-lg); padding: 24px; position: relative;
+      animation: modal-in .2s ease;
+    }
+    .ww-modal__header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .ww-modal__title { font-size: 18px; font-weight: 600; color: var(--gray-900); }
+    .ww-modal__desc  { font-size: 14px; color: var(--gray-400); margin-top: 4px; }
+    .ww-modal__close {
+      background: none; border: none; cursor: pointer; padding: 4px;
+      color: var(--gray-400); border-radius: var(--radius-sm); font-size: 16px;
+    }
+    .ww-modal__close:hover { color: var(--gray-700); background: var(--gray-100); }
+    .ww-modal__body  { font-size: 14px; color: var(--gray-600); margin-bottom: 20px; }
+    .ww-modal__footer{ display: flex; justify-content: flex-end; gap: 8px; }
+
+    /* Dropdown */
+    .ww-select-wrap { position: relative; width: 100%; max-width: 280px; }
+    .ww-select-label { font-size: 13px; font-weight: 500; color: var(--gray-700); margin-bottom: 5px; display: block; }
+    .ww-select-trigger {
+      width: 100%; padding: 8px 36px 8px 12px; border: 1.5px solid var(--gray-300);
+      border-radius: var(--radius); font-size: 14px; color: var(--gray-800);
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 12px center;
+      appearance: none; cursor: pointer; outline: none; transition: border-color .15s;
+    }
+    .ww-select-trigger:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(124,58,237,.12); }
+
+    /* Progress */
+    .ww-progress { display: flex; flex-direction: column; gap: 6px; width: 100%; max-width: 400px; }
+    .ww-progress__header { display: flex; justify-content: space-between; font-size: 13px; color: var(--gray-600); }
+    .ww-progress__track {
+      width: 100%; background: var(--gray-200); border-radius: var(--radius-full); overflow: hidden; height: 8px;
+    }
+    .ww-progress__track--xs { height: 4px; }
+    .ww-progress__track--sm { height: 6px; }
+    .ww-progress__track--lg { height: 12px; }
+    .ww-progress__fill { height: 100%; border-radius: var(--radius-full); transition: width .5s ease; }
+    .ww-progress__fill--default { background: var(--primary); }
+    .ww-progress__fill--success { background: var(--success); }
+    .ww-progress__fill--warning { background: var(--warning); }
+    .ww-progress__fill--danger  { background: var(--danger); }
+    .ww-progress__fill--info    { background: var(--info); }
+    .ww-progress__fill--striped {
+      background-image: repeating-linear-gradient(
+        45deg, rgba(255,255,255,.2) 0, rgba(255,255,255,.2) 4px, transparent 4px, transparent 8px
+      );
+    }
+
+    /* Tooltip */
+    .ww-tip-wrap { position: relative; display: inline-block; }
+    .ww-tip-bubble {
+      position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+      background: var(--gray-900); color: #fff; font-size: 12px; padding: 5px 10px;
+      border-radius: var(--radius-sm); white-space: nowrap; pointer-events: none;
+      opacity: 0; transition: opacity .15s; z-index: 100;
+    }
+    .ww-tip-wrap:hover .ww-tip-bubble,
+    .ww-tip-wrap:focus-within .ww-tip-bubble { opacity: 1; }
+    .ww-tip-bubble--light { background: #fff; color: var(--gray-800); box-shadow: var(--shadow-md); }
+
+    /* Toast */
+    .ww-toast-stack {
+      position: fixed; top: 16px; right: 16px; z-index: 9999;
+      display: flex; flex-direction: column; gap: 8px; width: 320px;
+    }
+    .ww-toast {
+      display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px;
+      background: #fff; border-radius: var(--radius); box-shadow: var(--shadow-lg);
+      border-left: 3px solid var(--gray-300); animation: slide-in .25s ease;
+    }
+    .ww-toast--success { border-left-color: var(--success); }
+    .ww-toast--warning { border-left-color: var(--warning); }
+    .ww-toast--danger  { border-left-color: var(--danger); }
+    .ww-toast--info    { border-left-color: var(--info); }
+    .ww-toast__icon { font-size: 15px; line-height: 1.4; flex-shrink: 0; }
+    .ww-toast--success .ww-toast__icon { color: var(--success); }
+    .ww-toast--warning .ww-toast__icon { color: var(--warning); }
+    .ww-toast--danger  .ww-toast__icon { color: var(--danger); }
+    .ww-toast--info    .ww-toast__icon { color: var(--info); }
+    .ww-toast__body { flex: 1; }
+    .ww-toast__title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .ww-toast__msg   { font-size: 13px; color: var(--gray-500); }
+    .ww-toast__close { background: none; border: none; cursor: pointer; color: var(--gray-400); font-size: 13px; padding: 0; }
+    .ww-toast__close:hover { color: var(--gray-700); }
+
+    /* ProgressBar demo row */
+    .pb-row { display: flex; align-items: center; gap: 12px; }
+    .pb-row .ww-progress { flex: 1; }
+    .pb-row span { font-size: 12px; color: var(--gray-500); width: 36px; text-align: right; flex-shrink: 0; }
+
+    /* ── Animations ── */
+    @keyframes spin     { to { transform: rotate(360deg); } }
+    @keyframes modal-in { from { opacity:0; transform: scale(.95); } to { opacity:1; transform: scale(1); } }
+    @keyframes slide-in { from { opacity:0; transform: translateX(40px); } to { opacity:1; transform: translateX(0); } }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; height: auto; position: static; padding: 12px 0; overflow-x: auto; white-space: nowrap; display: flex; }
+      .sidebar-logo { display: none; }
+      .sidebar-section { display: none; }
+      .sidebar a { display: inline-block; padding: 8px 14px; }
+      .main { padding: 24px 16px; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- ── Sidebar ── -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <h1>WealthyWidgets</h1>
+      <p>v2.1.0 · Component docs</p>
+    </div>
+    <div class="sidebar-section">Getting Started</div>
+    <a href="#" data-page="home" class="active">Overview</a>
+    <div class="sidebar-section">Components</div>
+    <a href="#" data-page="button">Button</a>
+    <a href="#" data-page="badge">Badge</a>
+    <a href="#" data-page="input">Input</a>
+    <a href="#" data-page="card">Card</a>
+    <a href="#" data-page="modal">Modal</a>
+    <a href="#" data-page="dropdown">Dropdown</a>
+    <a href="#" data-page="progressbar">ProgressBar</a>
+    <a href="#" data-page="tooltip">Tooltip</a>
+    <a href="#" data-page="toast">Toast</a>
+    <div class="sidebar-section">Widgets</div>
+    <a href="#" data-page="activitywidget">ActivityWidget</a>
+    <a href="#" data-page="weatherwidget">WeatherWidget</a>
+    <a href="#" data-page="codewidget">CodeWidget</a>
+  </nav>
+
+  <!-- ── Main content ── -->
+  <main class="main">
+
+    <!-- HOME -->
+    <div id="home" class="page active">
+      <div class="install-banner">
+        <h2>WealthyWidgets</h2>
+        <p>12 accessible, customisable React components for rapid UI development.</p>
+        <span class="install-cmd">npm install wealthywidgets</span>
+      </div>
+      <div class="page-header">
+        <h2>Getting Started</h2>
+        <p>Import components and styles, then use them anywhere in your React app.</p>
+      </div>
+      <div class="section">
+        <div class="section-title">Installation</div>
+        <div class="code-block"><code><span class="cmt"># 1. Install</span>
+npm install wealthywidgets
+
+<span class="cmt"># 2. Import styles once in your app root</span>
+<span class="kw">import</span> <span class="str">'wealthywidgets/dist/styles.css'</span>;
+
+<span class="cmt"># 3. Use components</span>
+<span class="kw">import</span> { Button, Card, Modal } <span class="kw">from</span> <span class="str">'wealthywidgets'</span>;</code></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Toast setup (one-time)</div>
+        <div class="code-block"><code><span class="kw">import</span> { ToastProvider } <span class="kw">from</span> <span class="str">'wealthywidgets'</span>;
+
+<span class="kw">function</span> App() {
+  <span class="kw">return</span> (
+    <span class="tag">&lt;ToastProvider</span> <span class="attr">position</span>=<span class="str">"top-right"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;YourApp</span> <span class="tag">/&gt;</span>
+    <span class="tag">&lt;/ToastProvider&gt;</span>
+  );
+}</code></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Components</div>
+        <table class="prop-table">
+          <thead><tr><th>Component</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>Button</code></td><td>6 variants, 5 sizes, loading, icons, pill shape</td></tr>
+            <tr><td><code>Badge</code></td><td>Status labels and dot notification indicators</td></tr>
+            <tr><td><code>Input</code></td><td>Text field with label, icons, hints, validation</td></tr>
+            <tr><td><code>Card</code></td><td>Content container with image, title, actions</td></tr>
+            <tr><td><code>Modal</code></td><td>Accessible dialog with focus management</td></tr>
+            <tr><td><code>Dropdown</code></td><td>Single/multi-select with search</td></tr>
+            <tr><td><code>ProgressBar</code></td><td>Status-coloured progress indicator</td></tr>
+            <tr><td><code>Tooltip</code></td><td>Hover hint, 4 placements, 2 variants</td></tr>
+            <tr><td><code>Toast</code></td><td>App-wide notifications via context</td></tr>
+            <tr><td><code>ActivityWidget</code></td><td>Event timeline with AI feed generation</td></tr>
+            <tr><td><code>WeatherWidget</code></td><td>Weather card with AI data generation</td></tr>
+            <tr><td><code>CodeWidget</code></td><td>Code block with editor and AI snippets</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- BUTTON -->
+    <div id="button" class="page">
+      <div class="page-header">
+        <h2>Button</h2>
+        <p>Interactive element with 6 variants, 5 sizes, loading state, and pill shape.</p>
+      </div>
+      <div class="section">
+        <div class="section-title">Variants</div>
+        <div class="example">
+          <div class="example-label">All variants</div>
+          <div class="example-preview">
+            <button class="ww-btn ww-btn--primary">Primary</button>
+            <button class="ww-btn ww-btn--secondary">Secondary</button>
+            <button class="ww-btn ww-btn--outline">Outline</button>
+            <button class="ww-btn ww-btn--ghost">Ghost</button>
+            <button class="ww-btn ww-btn--danger">Danger</button>
+            <button class="ww-btn ww-btn--success">Success</button>
+          </div>
+        </div>
+        <div class="code-block"><code><span class="tag">&lt;Button</span> <span class="attr">variant</span>=<span class="str">"primary"</span><span class="tag">&gt;</span>Primary<span class="tag">&lt;/Button&gt;</span>
+<span class="tag">&lt;Button</span> <span class="attr">variant</span>=<span class="str">"secondary"</span><span class="tag">&gt;</span>Secondary<span class="tag">&lt;/Button&gt;</span>
+<span class="tag">&lt;Button</span> <span class="attr">variant</span>=<span class="str">"outline"</span><span class="tag">&gt;</span>Outline<span class="tag">&lt;/Button&gt;</span>
+<span class="tag">&lt;Button</span> <span class="attr">variant</span>=<span class="str">"ghost"</span><span class="tag">&gt;</span>Ghost<span class="tag">&lt;/Button&gt;</span>
+<span class="tag">&lt;Button</span> <span class="attr">variant</span>=<span class="str">"danger"</span><span class="tag">&gt;</span>Danger<span class="tag">&lt;/Button&gt;</span>
+<span class="tag">&lt;Button</span> <span class="attr">variant</span>=<span class="str">"success"</span><span class="tag">&gt;</span>Success<span class="tag">&lt;/Button&gt;</span></code></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Sizes</div>
+        <div class="example">
+          <div class="example-label">xs → xl</div>
+          <div class="example-preview" style="align-items:center;">
+            <button class="ww-btn ww-btn--primary ww-btn--xs">XSmall</button>
+            <button class="ww-btn ww-btn--primary ww-btn--sm">Small</button>
+            <button class="ww-btn ww-btn--primary">Medium</button>
+            <button class="ww-btn ww-btn--primary ww-btn--lg">Large</button>
+            <button class="ww-btn ww-btn--primary ww-btn--xl">XLarge</button>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">States</div>
+        <div class="example">
+          <div class="example-label">Loading / Disabled / Rounded / Full width</div>
+          <div class="example-preview column" style="max-width:260px;">
+            <button class="ww-btn ww-btn--primary ww-btn--loading">Saving…</button>
+            <button class="ww-btn ww-btn--primary" disabled>Disabled</button>
+            <button class="ww-btn ww-btn--primary ww-btn--rounded">Pill button</button>
+            <button class="ww-btn ww-btn--primary ww-btn--full">Full width</button>
+          </div>
+        </div>
+        <div class="code-block"><code><span class="tag">&lt;Button</span> <span class="attr">loading</span><span class="tag">&gt;</span>Saving…<span class="tag">&lt;/Button&gt;</span>
+<span class="tag">&lt;Button</span> <span class="attr">disabled</span><span class="tag">&gt;</span>Disabled<span class="tag">&lt;/Button&gt;</span>
+<span class="tag">&lt;Button</span> <span class="attr">rounded</span><span class="tag">&gt;</span>Pill button<span class="tag">&lt;/Button&gt;</span>
+<span class="tag">&lt;Button</span> <span class="attr">fullWidth</span><span class="tag">&gt;</span>Full width<span class="tag">&lt;/Button&gt;</span></code></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Props</div>
+        <table class="prop-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>variant</code></td><td><code>ButtonVariant</code></td><td><code>'primary'</code></td><td>Visual style</td></tr>
+            <tr><td><code>size</code></td><td><code>ButtonSize</code></td><td><code>'md'</code></td><td>xs · sm · md · lg · xl</td></tr>
+            <tr><td><code>loading</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Shows spinner, disables click</td></tr>
+            <tr><td><code>rounded</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Pill shape</td></tr>
+            <tr><td><code>fullWidth</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Stretches to container</td></tr>
+            <tr><td><code>leftIcon</code></td><td><code>ReactNode</code></td><td>—</td><td>Icon before label</td></tr>
+            <tr><td><code>rightIcon</code></td><td><code>ReactNode</code></td><td>—</td><td>Icon after label</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- BADGE -->
+    <div id="badge" class="page">
+      <div class="page-header">
+        <h2>Badge</h2>
+        <p>Compact label for status, category, or notification count indicators.</p>
+      </div>
+      <div class="section">
+        <div class="section-title">Variants</div>
+        <div class="example">
+          <div class="example-label">All variants</div>
+          <div class="example-preview">
+            <span class="ww-badge ww-badge--default">Default</span>
+            <span class="ww-badge ww-badge--primary">Primary</span>
+            <span class="ww-badge ww-badge--success">Success</span>
+            <span class="ww-badge ww-badge--warning">Warning</span>
+            <span class="ww-badge ww-badge--danger">Danger</span>
+            <span class="ww-badge ww-badge--info">Info</span>
+          </div>
+        </div>
+        <div class="example">
+          <div class="example-label">Pill shape</div>
+          <div class="example-preview">
+            <span class="ww-badge ww-badge--primary ww-badge--pill">New</span>
+            <span class="ww-badge ww-badge--success ww-badge--pill">Active</span>
+            <span class="ww-badge ww-badge--danger ww-badge--pill">Critical</span>
+            <span class="ww-badge ww-badge--warning ww-badge--pill">Beta</span>
+          </div>
+        </div>
+        <div class="code-block"><code><span class="tag">&lt;Badge</span> <span class="attr">variant</span>=<span class="str">"success"</span><span class="tag">&gt;</span>Success<span class="tag">&lt;/Badge&gt;</span>
+<span class="tag">&lt;Badge</span> <span class="attr">variant</span>=<span class="str">"danger"</span> <span class="attr">pill</span><span class="tag">&gt;</span>Critical<span class="tag">&lt;/Badge&gt;</span></code></div>
+      </div>
+      <div class="section">
+        <div class="section-title">In context</div>
+        <div class="example">
+          <div class="example-label">Issue tracker</div>
+          <div class="example-preview column" style="max-width:320px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border:1px solid var(--gray-200);border-radius:8px;">
+              <span style="font-size:14px;">Feature Request</span>
+              <span class="ww-badge ww-badge--info ww-badge--sm">Open</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border:1px solid var(--gray-200);border-radius:8px;">
+              <span style="font-size:14px;">Critical Bug</span>
+              <span class="ww-badge ww-badge--danger ww-badge--sm ww-badge--pill">Critical</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border:1px solid var(--gray-200);border-radius:8px;">
+              <span style="font-size:14px;">Dark Mode</span>
+              <span class="ww-badge ww-badge--success ww-badge--sm">Done</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">Props</div>
+        <table class="prop-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>variant</code></td><td><code>BadgeVariant</code></td><td><code>'default'</code></td><td>Colour theme</td></tr>
+            <tr><td><code>size</code></td><td><code>BadgeSize</code></td><td><code>'md'</code></td><td>sm · md · lg</td></tr>
+            <tr><td><code>pill</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Fully rounded shape</td></tr>
+            <tr><td><code>dot</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Notification dot wrapper mode</td></tr>
+            <tr><td><code>count</code></td><td><code>number</code></td><td>—</td><td>Number in the dot</td></tr>
+            <tr><td><code>max</code></td><td><code>number</code></td><td><code>99</code></td><td>Cap — shows 99+ when exceeded</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- INPUT -->
+    <div id="input" class="page">
+      <div class="page-header">
+        <h2>Input</h2>
+        <p>Text field with label, icons, hint, validation states, and optional AI generation.</p>
+      </div>
+      <div class="section">
+        <div class="section-title">Basic</div>
+        <div class="example">
+          <div class="example-label">Default / With hint / Required</div>
+          <div class="example-preview column">
+            <div class="ww-field">
+              <label class="ww-label">Email address</label>
+              <div class="ww-input-wrap"><input class="ww-input" type="email" placeholder="you@example.com" /></div>
+            </div>
+            <div class="ww-field">
+              <label class="ww-label">Password</label>
+              <div class="ww-input-wrap"><input class="ww-input" type="password" placeholder="••••••••" /></div>
+              <span class="ww-hint">Must be at least 8 characters</span>
+            </div>
+            <div class="ww-field">
+              <label class="ww-label ww-label--required">Full name</label>
+              <div class="ww-input-wrap"><input class="ww-input" placeholder="Jane Smith" /></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">Validation states</div>
+        <div class="example">
+          <div class="example-label">Error / Success / Disabled</div>
+          <div class="example-preview column">
+            <div class="ww-field">
+              <label class="ww-label">Username</label>
+              <div class="ww-input-wrap"><input class="ww-input ww-input--error" value="john_doe" /></div>
+              <span class="ww-msg ww-msg--error">This username is already taken</span>
+            </div>
+            <div class="ww-field">
+              <label class="ww-label">Username</label>
+              <div class="ww-input-wrap"><input class="ww-input ww-input--success" value="cooluser_42" /></div>
+              <span class="ww-msg ww-msg--success">Username is available!</span>
+            </div>
+            <div class="ww-field">
+              <label class="ww-label">Account ID</label>
+              <div class="ww-input-wrap"><input class="ww-input" value="ACC-00123" disabled /></div>
+            </div>
+          </div>
+        </div>
+        <div class="code-block"><code><span class="tag">&lt;Input</span> <span class="attr">label</span>=<span class="str">"Username"</span> <span class="attr">status</span>=<span class="str">"error"</span>
+       <span class="attr">message</span>=<span class="str">"This username is already taken"</span> <span class="tag">/&gt;</span>
+<span class="tag">&lt;Input</span> <span class="attr">label</span>=<span class="str">"Username"</span> <span class="attr">status</span>=<span class="str">"success"</span>
+       <span class="attr">message</span>=<span class="str">"Username is available!"</span> <span class="tag">/&gt;</span></code></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Props</div>
+        <table class="prop-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>label</code></td><td><code>string</code></td><td>—</td><td>Field label</td></tr>
+            <tr><td><code>hint</code></td><td><code>string</code></td><td>—</td><td>Helper text below input</td></tr>
+            <tr><td><code>status</code></td><td><code>InputStatus</code></td><td><code>'default'</code></td><td>default · error · success · warning</td></tr>
+            <tr><td><code>message</code></td><td><code>string</code></td><td>—</td><td>Validation message</td></tr>
+            <tr><td><code>size</code></td><td><code>InputSize</code></td><td><code>'md'</code></td><td>sm · md · lg</td></tr>
+            <tr><td><code>leftIcon</code></td><td><code>ReactNode</code></td><td>—</td><td>Icon inside left edge</td></tr>
+            <tr><td><code>required</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Asterisk on label + aria-required</td></tr>
+            <tr><td><code>fullWidth</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Stretches to container</td></tr>
+            <tr><td><code>onAiGenerate</code></td><td><code>(v: string) => Promise&lt;string&gt;</code></td><td>—</td><td>Adds ✦ AI button</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CARD -->
+    <div id="card" class="page">
+      <div class="page-header">
+        <h2>Card</h2>
+        <p>Flexible content container with optional image, title, description, and action slots.</p>
+      </div>
+      <div class="section">
+        <div class="section-title">Variants</div>
+        <div class="example">
+          <div class="example-label">Default / Elevated / Outlined</div>
+          <div class="example-preview" style="align-items:stretch;">
+            <div class="ww-card" style="width:220px;">
+              <div class="ww-card__body">
+                <div class="ww-card__title">Getting Started</div>
+                <div class="ww-card__sub">Documentation</div>
+                <div class="ww-card__desc">Learn how to install and use WealthyWidgets.</div>
+                <div class="ww-card__actions"><button class="ww-btn ww-btn--primary ww-btn--sm">Read more</button></div>
+              </div>
+            </div>
+            <div class="ww-card ww-card--elevated" style="width:220px;">
+              <div class="ww-card__body">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+                  <div>
+                    <div class="ww-card__title">Premium Plan</div>
+                    <div class="ww-card__sub">$49 / month</div>
+                  </div>
+                  <span class="ww-badge ww-badge--primary ww-badge--pill ww-badge--sm">Popular</span>
+                </div>
+                <div class="ww-card__desc">Unlimited projects and priority support.</div>
+                <button class="ww-btn ww-btn--primary ww-btn--full">Upgrade Now</button>
+              </div>
+            </div>
+            <div class="ww-card ww-card--outlined" style="width:220px;">
+              <div class="ww-card__body">
+                <div class="ww-card__title">API Reference</div>
+                <div class="ww-card__desc">Complete TypeScript definitions and examples.</div>
+                <div class="ww-card__actions"><button class="ww-btn ww-btn--outline ww-btn--sm">Open Docs</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="code-block"><code><span class="tag">&lt;Card</span> <span class="attr">variant</span>=<span class="str">"elevated"</span>
+     <span class="attr">title</span>=<span class="str">"Premium Plan"</span>
+     <span class="attr">subtitle</span>=<span class="str">"$49 / month"</span>
+     <span class="attr">headerExtra</span>={<span class="tag">&lt;Badge</span> <span class="attr">variant</span>=<span class="str">"primary"</span> <span class="attr">pill</span><span class="tag">&gt;</span>Popular<span class="tag">&lt;/Badge&gt;</span>}
+     <span class="attr">actions</span>={<span class="tag">&lt;Button</span> <span class="attr">fullWidth</span><span class="tag">&gt;</span>Upgrade Now<span class="tag">&lt;/Button&gt;</span>}
+<span class="tag">/&gt;</span></code></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Props</div>
+        <table class="prop-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>variant</code></td><td><code>CardVariant</code></td><td><code>'default'</code></td><td>default · elevated · outlined</td></tr>
+            <tr><td><code>title</code></td><td><code>string</code></td><td>—</td><td>Card heading</td></tr>
+            <tr><td><code>subtitle</code></td><td><code>string</code></td><td>—</td><td>Secondary text below title</td></tr>
+            <tr><td><code>description</code></td><td><code>string</code></td><td>—</td><td>Body text</td></tr>
+            <tr><td><code>imageSrc</code></td><td><code>string</code></td><td>—</td><td>Top image URL</td></tr>
+            <tr><td><code>imageAspectRatio</code></td><td><code>string</code></td><td><code>'16/9'</code></td><td>Aspect ratio for image</td></tr>
+            <tr><td><code>actions</code></td><td><code>ReactNode</code></td><td>—</td><td>Button row at the bottom</td></tr>
+            <tr><td><code>headerExtra</code></td><td><code>ReactNode</code></td><td>—</td><td>Slot next to the title (e.g. Badge)</td></tr>
+            <tr><td><code>clickable</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Hover lift effect</td></tr>
+            <tr><td><code>noPadding</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Removes body padding</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MODAL -->
+    <div id="modal" class="page">
+      <div class="page-header">
+        <h2>Modal</h2>
+        <p>Accessible dialog with focus management, Escape key, backdrop click, and Portal rendering.</p>
+      </div>
+      <div class="section">
+        <div class="section-title">Demo</div>
+        <div class="example">
+          <div class="example-label">Click to open</div>
+          <div class="example-preview">
+            <button class="ww-btn ww-btn--primary" onclick="document.getElementById('demo-modal').classList.remove('hidden')">Open Modal</button>
+            <button class="ww-btn ww-btn--outline" onclick="document.getElementById('demo-modal-simple').classList.remove('hidden')">Content Only</button>
+          </div>
+        </div>
+        <div class="code-block"><code><span class="kw">const</span> [open, setOpen] = useState(<span class="kw">false</span>);
+
+<span class="tag">&lt;Button</span> <span class="attr">onClick</span>={() => setOpen(<span class="kw">true</span>)}<span class="tag">&gt;</span>Open Modal<span class="tag">&lt;/Button&gt;</span>
+
+<span class="tag">&lt;Modal</span>
+  <span class="attr">isOpen</span>={open}
+  <span class="attr">onClose</span>={() => setOpen(<span class="kw">false</span>)}
+  <span class="attr">title</span>=<span class="str">"Confirm Action"</span>
+  <span class="attr">description</span>=<span class="str">"This will permanently delete your data."</span>
+  <span class="attr">footer</span>={
+    <span class="tag">&lt;&gt;</span>
+      <span class="tag">&lt;Button</span> <span class="attr">variant</span>=<span class="str">"ghost"</span> <span class="attr">onClick</span>={onClose}<span class="tag">&gt;</span>Cancel<span class="tag">&lt;/Button&gt;</span>
+      <span class="tag">&lt;Button</span> <span class="attr">variant</span>=<span class="str">"danger"</span> <span class="attr">onClick</span>={handleDelete}<span class="tag">&gt;</span>Delete<span class="tag">&lt;/Button&gt;</span>
+    <span class="tag">&lt;/&gt;</span>
+  }
+<span class="tag">&gt;</span>
+  Are you sure you want to delete <span class="tag">&lt;strong&gt;</span>Project Alpha<span class="tag">&lt;/strong&gt;</span>?
+<span class="tag">&lt;/Modal&gt;</span></code></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Props</div>
+        <table class="prop-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>isOpen</code></td><td><code>boolean</code></td><td>—</td><td>Controls visibility</td></tr>
+            <tr><td><code>onClose</code></td><td><code>() => void</code></td><td>—</td><td>Called on Escape / backdrop / ✕</td></tr>
+            <tr><td><code>title</code></td><td><code>string</code></td><td>—</td><td>Dialog heading</td></tr>
+            <tr><td><code>description</code></td><td><code>string</code></td><td>—</td><td>Subtitle below title</td></tr>
+            <tr><td><code>footer</code></td><td><code>ReactNode</code></td><td>—</td><td>Action buttons row</td></tr>
+            <tr><td><code>size</code></td><td><code>ModalSize</code></td><td><code>'md'</code></td><td>sm · md · lg · xl · full</td></tr>
+            <tr><td><code>disableBackdropClose</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Prevent closing on backdrop click</td></tr>
+            <tr><td><code>hideCloseButton</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Hide the ✕ button</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- DROPDOWN -->
+    <div id="dropdown" class="page">
+      <div class="page-header">
+        <h2>Dropdown</h2>
+        <p>Single and multi-select dropdown with optional search and keyboard navigation.</p>
+      </div>
+      <div class="section">
+        <div class="section-title">Examples</div>
+        <div class="example">
+          <div class="example-label">Single select / With search / Multi-select</div>
+          <div class="example-preview">
+            <div class="ww-select-wrap">
+              <label class="ww-select-label">Framework</label>
+              <select class="ww-select-trigger">
+                <option value="">Choose a framework…</option>
+                <option>React</option>
+                <option>Vue</option>
+                <option>Svelte</option>
+                <option>Angular</option>
+              </select>
+            </div>
+            <div class="ww-select-wrap">
+              <label class="ww-select-label">Language</label>
+              <select class="ww-select-trigger">
+                <option value="">Search languages…</option>
+                <option>TypeScript</option>
+                <option>JavaScript</option>
+                <option>Python</option>
+                <option>Rust</option>
+                <option>Go</option>
+                <option disabled>C++ (disabled)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="code-block"><code><span class="tag">&lt;Dropdown</span>
+  <span class="attr">label</span>=<span class="str">"Framework"</span>
+  <span class="attr">options</span>={[{ value: <span class="str">'react'</span>, label: <span class="str">'React'</span> }, ...]}
+  <span class="attr">value</span>={val}
+  <span class="attr">onChange</span>={(v) => setVal(v <span class="kw">as</span> string)}
+<span class="tag">/&gt;</span>
+
+<span class="cmt">// Multi-select with search</span>
+<span class="tag">&lt;Dropdown</span>
+  <span class="attr">label</span>=<span class="str">"Skills"</span>
+  <span class="attr">multiple</span> <span class="attr">searchable</span>
+  <span class="attr">options</span>={skillOptions}
+  <span class="attr">value</span>={skills}
+  <span class="attr">onChange</span>={(v) => setSkills(v <span class="kw">as</span> string[])}
+<span class="tag">/&gt;</span></code></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Props</div>
+        <table class="prop-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>options</code></td><td><code>DropdownOption[]</code></td><td>—</td><td>List of options</td></tr>
+            <tr><td><code>value</code></td><td><code>string | string[]</code></td><td>—</td><td>Selected value(s)</td></tr>
+            <tr><td><code>onChange</code></td><td><code>(v) => void</code></td><td>—</td><td>Called on selection</td></tr>
+            <tr><td><code>multiple</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Multi-select mode with tags</td></tr>
+            <tr><td><code>searchable</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Shows search field in menu</td></tr>
+            <tr><td><code>placeholder</code></td><td><code>string</code></td><td><code>'Select…'</code></td><td>Placeholder text</td></tr>
+            <tr><td><code>label</code></td><td><code>string</code></td><td>—</td><td>Field label</td></tr>
+            <tr><td><code>fullWidth</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Stretches to container</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PROGRESSBAR -->
+    <div id="progressbar" class="page">
+      <div class="page-header">
+        <h2>ProgressBar</h2>
+        <p>Status-coloured progress indicator with label positions, striped mode, and mount animation.</p>
+      </div>
+      <div class="section">
+        <div class="section-title">Statuses</div>
+        <div class="example">
+          <div class="example-label">danger / warning / info / success</div>
+          <div class="example-preview column">
+            <div class="pb-row"><div class="ww-progress"><div class="ww-progress__header"><span>Disk usage</span><span>90%</span></div><div class="ww-progress__track"><div class="ww-progress__fill ww-progress__fill--danger" style="width:90%"></div></div></div></div>
+            <div class="pb-row"><div class="ww-progress"><div class="ww-progress__header"><span>Memory</span><span>60%</span></div><div class="ww-progress__track"><div class="ww-progress__fill ww-progress__fill--warning" style="width:60%"></div></div></div></div>
+            <div class="pb-row"><div class="ww-progress"><div class="ww-progress__header"><span>Downloading</span><span>45%</span></div><div class="ww-progress__track"><div class="ww-progress__fill ww-progress__fill--info" style="width:45%"></div></div></div></div>
+            <div class="pb-row"><div class="ww-progress"><div class="ww-progress__header"><span>Backup</span><span>100%</span></div><div class="ww-progress__track"><div class="ww-progress__fill ww-progress__fill--success" style="width:100%"></div></div></div></div>
+          </div>
+        </div>
+        <div class="code-block"><code><span class="tag">&lt;ProgressBar</span> <span class="attr">value</span>={90} <span class="attr">status</span>=<span class="str">"danger"</span>  <span class="attr">title</span>=<span class="str">"Disk usage"</span>  <span class="attr">showLabel</span> <span class="tag">/&gt;</span>
+<span class="tag">&lt;ProgressBar</span> <span class="attr">value</span>={60} <span class="attr">status</span>=<span class="str">"warning"</span> <span class="attr">title</span>=<span class="str">"Memory"</span>      <span class="attr">showLabel</span> <span class="tag">/&gt;</span>
+<span class="tag">&lt;ProgressBar</span> <span class="attr">value</span>={45} <span class="attr">status</span>=<span class="str">"info"</span>    <span class="attr">title</span>=<span class="str">"Downloading"</span> <span class="attr">showLabel</span> <span class="tag">/&gt;</span>
+<span class="tag">&lt;ProgressBar</span> <span class="attr">value</span>={100} <span class="attr">status</span>=<span class="str">"success"</span> <span class="attr">title</span>=<span class="str">"Backup"</span>     <span class="attr">showLabel</span> <span class="tag">/&gt;</span></code></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Sizes</div>
+        <div class="example">
+          <div class="example-label">xs / sm / md / lg</div>
+          <div class="example-preview column">
+            <div class="ww-progress"><div class="ww-progress__header"><span>XSmall</span></div><div class="ww-progress__track ww-progress__track--xs"><div class="ww-progress__fill ww-progress__fill--default" style="width:60%"></div></div></div>
+            <div class="ww-progress"><div class="ww-progress__header"><span>Small</span></div><div class="ww-progress__track ww-progress__track--sm"><div class="ww-progress__fill ww-progress__fill--default" style="width:60%"></div></div></div>
+            <div class="ww-progress"><div class="ww-progress__header"><span>Medium</span></div><div class="ww-progress__track"><div class="ww-progress__fill ww-progress__fill--default" style="width:60%"></div></div></div>
+            <div class="ww-progress"><div class="ww-progress__header"><span>Large</span></div><div class="ww-progress__track ww-progress__track--lg"><div class="ww-progress__fill ww-progress__fill--default" style="width:60%"></div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">Props</div>
+        <table class="prop-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>value</code></td><td><code>number</code></td><td>—</td><td>Current value (0–max)</td></tr>
+            <tr><td><code>max</code></td><td><code>number</code></td><td><code>100</code></td><td>Maximum value</td></tr>
+            <tr><td><code>status</code></td><td><code>ProgressBarStatus</code></td><td><code>'default'</code></td><td>default · success · warning · danger · info</td></tr>
+            <tr><td><code>size</code></td><td><code>ProgressBarSize</code></td><td><code>'md'</code></td><td>xs · sm · md · lg</td></tr>
+            <tr><td><code>showLabel</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Show percentage label</td></tr>
+            <tr><td><code>labelPosition</code></td><td><code>string</code></td><td><code>'right'</code></td><td>right · top · inside</td></tr>
+            <tr><td><code>striped</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Diagonal stripe pattern</td></tr>
+            <tr><td><code>animated</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Animate fill from 0 on mount</td></tr>
+            <tr><td><code>title</code></td><td><code>string</code></td><td>—</td><td>Label above the bar</td></tr>
+            <tr><td><code>formatLabel</code></td><td><code>(v, max) => string</code></td><td>—</td><td>Custom label format</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TOOLTIP -->
+    <div id="tooltip" class="page">
+      <div class="page-header">
+        <h2>Tooltip</h2>
+        <p>Hover/focus hint with 4 placements, 2 variants, and configurable delays.</p>
+      </div>
+      <div class="section">
+        <div class="section-title">Placements</div>
+        <div class="example">
+          <div class="example-label">Hover over the buttons</div>
+          <div class="example-preview center" style="gap:24px; padding: 48px 24px;">
+            <div class="ww-tip-wrap"><button class="ww-btn ww-btn--outline">Top</button><span class="ww-tip-bubble">Top tooltip</span></div>
+            <div class="ww-tip-wrap" style="position:relative;">
+              <button class="ww-btn ww-btn--outline">Bottom</button>
+              <span class="ww-tip-bubble" style="top: calc(100% + 8px); bottom:auto;">Bottom tooltip</span>
+            </div>
+            <div class="ww-tip-wrap" style="position:relative;">
+              <button class="ww-btn ww-btn--outline">Right</button>
+              <span class="ww-tip-bubble" style="left: calc(100% + 8px); right:auto; top:50%; bottom:auto; transform:translateY(-50%);">Right tooltip</span>
+            </div>
+            <div class="ww-tip-wrap" style="position:relative;">
+              <button class="ww-btn ww-btn--outline">Light</button>
+              <span class="ww-tip-bubble ww-tip-bubble--light">Light variant</span>
+            </div>
+          </div>
+        </div>
+        <div class="code-block"><code><span class="tag">&lt;Tooltip</span> <span class="attr">content</span>=<span class="str">"Top tooltip"</span> <span class="attr">placement</span>=<span class="str">"top"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;Button&gt;</span>Hover me<span class="tag">&lt;/Button&gt;</span>
+<span class="tag">&lt;/Tooltip&gt;</span>
+
+<span class="tag">&lt;Tooltip</span> <span class="attr">content</span>=<span class="str">"Light variant"</span> <span class="attr">variant</span>=<span class="str">"light"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;Button&gt;</span>Light<span class="tag">&lt;/Button&gt;</span>
+<span class="tag">&lt;/Tooltip&gt;</span></code></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Props</div>
+        <table class="prop-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>content</code></td><td><code>ReactNode</code></td><td>—</td><td>Tooltip content</td></tr>
+            <tr><td><code>placement</code></td><td><code>TooltipPlacement</code></td><td><code>'top'</code></td><td>top · bottom · left · right</td></tr>
+            <tr><td><code>variant</code></td><td><code>TooltipVariant</code></td><td><code>'dark'</code></td><td>dark · light</td></tr>
+            <tr><td><code>showDelay</code></td><td><code>number</code></td><td><code>300</code></td><td>ms before showing</td></tr>
+            <tr><td><code>hideDelay</code></td><td><code>number</code></td><td><code>100</code></td><td>ms before hiding</td></tr>
+            <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disables tooltip</td></tr>
+            <tr><td><code>maxWidth</code></td><td><code>number</code></td><td><code>240</code></td><td>Max width in px</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="page">
+      <div class="page-header">
+        <h2>Toast</h2>
+        <p>App-wide notifications via React Context. Wrap your app with <code>&lt;ToastProvider&gt;</code>, call <code>useToast()</code> anywhere inside.</p>
+      </div>
+      <div class="section">
+        <div class="section-title">Demo</div>
+        <div class="example">
+          <div class="example-label">Click to trigger toasts</div>
+          <div class="example-preview">
+            <button class="ww-btn ww-btn--success ww-btn--sm" onclick="showToast('success','Saved!','Changes have been saved.')">Success</button>
+            <button class="ww-btn ww-btn--secondary ww-btn--sm" onclick="showToast('info','Info','Sync started in background.')">Info</button>
+            <button class="ww-btn ww-btn--secondary ww-btn--sm" onclick="showToast('warning','Warning','Session expires in 5 min.')">Warning</button>
+            <button class="ww-btn ww-btn--danger ww-btn--sm"   onclick="showToast('danger','Error','Connection lost. Retrying…')">Error</button>
+            <button class="ww-btn ww-btn--ghost ww-btn--sm"    onclick="clearToasts()">Clear all</button>
+          </div>
+        </div>
+        <div class="code-block"><code><span class="cmt">// Wrap app once</span>
+<span class="tag">&lt;ToastProvider</span> <span class="attr">position</span>=<span class="str">"top-right"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;App</span> <span class="tag">/&gt;</span>
+<span class="tag">&lt;/ToastProvider&gt;</span>
+
+<span class="cmt">// Use anywhere inside</span>
+<span class="kw">const</span> { toast } = useToast();
+toast({ <span class="attr">message</span>: <span class="str">'Saved!'</span>, <span class="attr">variant</span>: <span class="str">'success'</span> });
+toast({ <span class="attr">title</span>: <span class="str">'Error'</span>, <span class="attr">message</span>: <span class="str">'Connection lost.'</span>, <span class="attr">variant</span>: <span class="str">'danger'</span>, <span class="attr">duration</span>: 0 });</code></div>
+      </div>
+      <div class="section">
+        <div class="section-title">ToastProvider props</div>
+        <table class="prop-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>position</code></td><td><code>ToastPosition</code></td><td><code>'top-right'</code></td><td>top-right · top-left · top-center · bottom-right · bottom-left · bottom-center</td></tr>
+            <tr><td><code>defaultDuration</code></td><td><code>number</code></td><td><code>4000</code></td><td>Auto-dismiss in ms. <code>0</code> = manual only</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="section">
+        <div class="section-title">toast() options</div>
+        <table class="prop-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>message</code></td><td><code>ReactNode</code></td><td>Toast body (required)</td></tr>
+            <tr><td><code>title</code></td><td><code>string</code></td><td>Bold heading above message</td></tr>
+            <tr><td><code>variant</code></td><td><code>ToastVariant</code></td><td>default · success · warning · danger · info</td></tr>
+            <tr><td><code>duration</code></td><td><code>number</code></td><td>Override default. <code>0</code> = no auto-dismiss</td></tr>
+            <tr><td><code>icon</code></td><td><code>ReactNode</code></td><td>Replace default variant icon</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ACTIVITYWIDGET -->
+    <div id="activitywidget" class="page">
+      <div class="page-header">
+        <h2>ActivityWidget ✦</h2>
+        <p>Scrollable event timeline with status dots, relative timestamps, and optional AI-powered feed generation.</p>
+      </div>
+      <div class="section">
+        <div class="section-title">Preview</div>
+        <div class="example">
+          <div class="example-label">Recent Activity feed</div>
+          <div class="example-preview column" style="padding:24px;">
+            <div style="background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:20px;max-width:420px;width:100%;">
+              <div style="font-size:15px;font-weight:600;color:var(--gray-900);margin-bottom:16px;">Recent Activity</div>
+              <div style="display:flex;flex-direction:column;gap:0;">
+                <div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--gray-100);">
+                  <div style="width:8px;height:8px;border-radius:50%;background:var(--success);margin-top:5px;flex-shrink:0;"></div>
+                  <div style="flex:1;"><div style="font-size:14px;font-weight:500;color:var(--gray-800);">PR #142 merged</div><div style="font-size:12px;color:var(--gray-400);">feat: add dark mode support</div></div>
+                  <div style="font-size:12px;color:var(--gray-400);">3m ago</div>
+                </div>
+                <div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--gray-100);">
+                  <div style="width:8px;height:8px;border-radius:50%;background:var(--danger);margin-top:5px;flex-shrink:0;"></div>
+                  <div style="flex:1;"><div style="font-size:14px;font-weight:500;color:var(--gray-800);">Build failed</div><div style="font-size:12px;color:var(--gray-400);">Unit test timeout on CI</div></div>
+                  <div style="font-size:12px;color:var(--gray-400);">12m ago</div>
+                </div>
+                <div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--gray-100);">
+                  <div style="width:8px;height:8px;border-radius:50%;background:var(--info);margin-top:5px;flex-shrink:0;"></div>
+                  <div style="flex:1;"><div style="font-size:14px;font-weight:500;color:var(--gray-800);">Deploy started</div><div style="font-size:12px;color:var(--gray-400);">v1.2.0 → production</div></div>
+                  <div style="font-size:12px;color:var(--gray-400);">18m ago</div>
+                </div>
+                <div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--gray-100);">
+                  <div style="width:8px;height:8px;border-radius:50%;background:var(--warning);margin-top:5px;flex-shrink:0;"></div>
+                  <div style="flex:1;"><div style="font-size:14px;font-weight:500;color:var(--gray-800);">New issue opened</div><div style="font-size:12px;color:var(--gray-400);">Dropdown z-index overlaps modal</div></div>
+                  <div style="font-size:12px;color:var(--gray-400);">1h ago</div>
+                </div>
+                <div style="display:flex;gap:12px;padding:10px 0;">
+                  <div style="width:8px;height:8px;border-radius:50%;background:var(--success);margin-top:5px;flex-shrink:0;"></div>
+                  <div style="flex:1;"><div style="font-size:14px;font-weight:500;color:var(--gray-800);">Release tagged</div><div style="font-size:12px;color:var(--gray-400);">v1.1.5</div></div>
+                  <div style="font-size:12px;color:var(--gray-400);">2h ago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="code-block"><code><span class="kw">const</span> items = [
+  { id: 1, label: <span class="str">'PR #142 merged'</span>, description: <span class="str">'feat: add dark mode'</span>, status: <span class="str">'success'</span>, timestamp: <span class="str">'3m ago'</span> },
+  { id: 2, label: <span class="str">'Build failed'</span>,    description: <span class="str">'Unit test timeout'</span>,     status: <span class="str">'danger'</span>,  timestamp: <span class="str">'12m ago'</span> },
+  { id: 3, label: <span class="str">'Deploy started'</span>,  description: <span class="str">'v1.2.0 → production'</span>, status: <span class="str">'info'</span>,    timestamp: <span class="str">'18m ago'</span> },
+];
+
+<span class="tag">&lt;ActivityWidget</span>
+  <span class="attr">title</span>=<span class="str">"Recent Activity"</span>
+  <span class="attr">items</span>={items}
+  <span class="attr">maxVisible</span>={5}
+<span class="tag">/&gt;</span>
+
+<span class="cmt">// With AI generation</span>
+<span class="tag">&lt;ActivityWidget</span>
+  <span class="attr">title</span>=<span class="str">"AI-Powered Feed"</span>
+  <span class="attr">items</span>={items}
+  <span class="attr">onAiGenerate</span>={async (prompt) => {
+    <span class="kw">const</span> newItems = <span class="kw">await</span> fetchActivity(prompt);
+    setItems(newItems);
+  }}
+<span class="tag">/&gt;</span></code></div>
+      </div>
+      <div class="section">
+        <div class="section-title">ActivityItem shape</div>
+        <div class="code-block"><code><span class="kw">interface</span> ActivityItem {
+  id:          string | number;
+  label:       string;
+  description?: string;
+  status?:     <span class="str">'success'</span> | <span class="str">'danger'</span> | <span class="str">'warning'</span> | <span class="str">'info'</span> | <span class="str">'default'</span>;
+  timestamp?:  string;
+  icon?:       ReactNode;
+}</code></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Props</div>
+        <table class="prop-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>items</code></td><td><code>ActivityItem[]</code></td><td>—</td><td>Array of activity events</td></tr>
+            <tr><td><code>title</code></td><td><code>string</code></td><td>—</td><td>Widget heading</td></tr>
+            <tr><td><code>maxVisible</code></td><td><code>number</code></td><td><code>5</code></td><td>Items shown before "Show more"</td></tr>
+            <tr><td><code>compact</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Tighter row spacing</td></tr>
+            <tr><td><code>bordered</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Outer border</td></tr>
+            <tr><td><code>onAiGenerate</code></td><td><code>(prompt: string) => Promise&lt;void&gt;</code></td><td>—</td><td>Adds ✦ AI prompt bar</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- WEATHERWIDGET -->
+    <div id="weatherwidget" class="page">
+      <div class="page-header">
+        <h2>WeatherWidget ✦</h2>
+        <p>Current conditions card with condition-driven gradient background and optional 7-day forecast strip.</p>
+      </div>
+      <div class="section">
+        <div class="section-title">Conditions</div>
+        <div class="example">
+          <div class="example-label">Background changes with weather condition</div>
+          <div class="example-preview" style="gap:16px;flex-wrap:wrap;">
+            <div style="border-radius:16px;padding:24px 20px;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#fff;width:180px;">
+              <div style="font-size:32px;margin-bottom:4px;">☀️</div>
+              <div style="font-size:28px;font-weight:700;">23°C</div>
+              <div style="font-size:14px;opacity:.85;">San Francisco</div>
+              <div style="font-size:12px;opacity:.7;margin-top:8px;">Sunny · Feels like 21°</div>
+            </div>
+            <div style="border-radius:16px;padding:24px 20px;background:linear-gradient(135deg,#64748b,#94a3b8);color:#fff;width:180px;">
+              <div style="font-size:32px;margin-bottom:4px;">🌧️</div>
+              <div style="font-size:28px;font-weight:700;">11°C</div>
+              <div style="font-size:14px;opacity:.85;">London, UK</div>
+              <div style="font-size:12px;opacity:.7;margin-top:8px;">Rainy · Humidity 89%</div>
+            </div>
+            <div style="border-radius:16px;padding:24px 20px;background:linear-gradient(135deg,#1e3a5f,#2d6a9f);color:#fff;width:180px;">
+              <div style="font-size:32px;margin-bottom:4px;">❄️</div>
+              <div style="font-size:28px;font-weight:700;">-4°C</div>
+              <div style="font-size:14px;opacity:.85;">Helsinki</div>
+              <div style="font-size:12px;opacity:.7;margin-top:8px;">Snowy · Wind 18 km/h</div>
+            </div>
+            <div style="border-radius:16px;padding:24px 20px;background:linear-gradient(135deg,#1c1917,#44403c);color:#fff;width:180px;">
+              <div style="font-size:32px;margin-bottom:4px;">⛈️</div>
+              <div style="font-size:28px;font-weight:700;">28°C</div>
+              <div style="font-size:14px;opacity:.85;">Miami, FL</div>
+              <div style="font-size:12px;opacity:.7;margin-top:8px;">Stormy · Wind 55 km/h</div>
+            </div>
+          </div>
+        </div>
+        <div class="code-block"><code><span class="tag">&lt;WeatherWidget</span>
+  <span class="attr">location</span>=<span class="str">"San Francisco, CA"</span>
+  <span class="attr">temperature</span>={23}
+  <span class="attr">unit</span>=<span class="str">"C"</span>
+  <span class="attr">condition</span>=<span class="str">"sunny"</span>
+  <span class="attr">feelsLike</span>={21}
+  <span class="attr">humidity</span>={55}
+  <span class="attr">windSpeed</span>={12}
+  <span class="attr">showForecast</span>
+  <span class="attr">forecast</span>={forecastDays}
+<span class="tag">/&gt;</span></code></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Forecast day shape</div>
+        <div class="code-block"><code><span class="kw">interface</span> WeatherForecastDay {
+  day:       string;        <span class="cmt">// e.g. 'Mon'</span>
+  high:      number;
+  low:       number;
+  condition: WeatherCondition;
+}</code></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Props</div>
+        <table class="prop-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>location</code></td><td><code>string</code></td><td>—</td><td>City / location name</td></tr>
+            <tr><td><code>temperature</code></td><td><code>number</code></td><td>—</td><td>Current temperature</td></tr>
+            <tr><td><code>unit</code></td><td><code>'C' | 'F'</code></td><td><code>'C'</code></td><td>Temperature unit</td></tr>
+            <tr><td><code>condition</code></td><td><code>WeatherCondition</code></td><td>—</td><td>sunny · cloudy · rainy · snowy · stormy · partly-cloudy · windy · foggy</td></tr>
+            <tr><td><code>feelsLike</code></td><td><code>number</code></td><td>—</td><td>Apparent temperature</td></tr>
+            <tr><td><code>humidity</code></td><td><code>number</code></td><td>—</td><td>Humidity %</td></tr>
+            <tr><td><code>windSpeed</code></td><td><code>number</code></td><td>—</td><td>Wind speed</td></tr>
+            <tr><td><code>windUnit</code></td><td><code>string</code></td><td><code>'km/h'</code></td><td>Wind speed unit</td></tr>
+            <tr><td><code>uvIndex</code></td><td><code>number</code></td><td>—</td><td>UV index</td></tr>
+            <tr><td><code>visibility</code></td><td><code>number</code></td><td>—</td><td>Visibility in km</td></tr>
+            <tr><td><code>showForecast</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Show 7-day forecast strip</td></tr>
+            <tr><td><code>forecast</code></td><td><code>WeatherForecastDay[]</code></td><td>—</td><td>Forecast data</td></tr>
+            <tr><td><code>onAiGenerate</code></td><td><code>(prompt: string) => Promise&lt;void&gt;</code></td><td>—</td><td>Adds ✦ AI prompt bar</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CODEWIDGET -->
+    <div id="codewidget" class="page">
+      <div class="page-header">
+        <h2>CodeWidget ✦</h2>
+        <p>Dark-themed code block with macOS toolbar, copy button, line numbers, editable mode, and AI snippet generation.</p>
+      </div>
+      <div class="section">
+        <div class="section-title">Preview</div>
+        <div class="example">
+          <div class="example-label">TypeScript with line numbers and highlighted lines</div>
+          <div class="example-preview column" style="padding:0;">
+            <div style="background:#111827;border-radius:12px;overflow:hidden;">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#1f2937;border-bottom:1px solid #374151;">
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <span style="width:10px;height:10px;border-radius:50%;background:#ef4444;display:inline-block;"></span>
+                  <span style="width:10px;height:10px;border-radius:50%;background:#f59e0b;display:inline-block;"></span>
+                  <span style="width:10px;height:10px;border-radius:50%;background:#22c55e;display:inline-block;"></span>
+                  <span style="margin-left:8px;font-size:12px;color:#9ca3af;font-family:monospace;">useCounter.ts</span>
+                </div>
+                <div style="display:flex;gap:8px;align-items:center;">
+                  <span style="font-size:11px;padding:2px 7px;border-radius:4px;background:#374151;color:#9ca3af;font-family:monospace;">typescript</span>
+                  <button onclick="navigator.clipboard.writeText('// code')" style="font-size:11px;padding:3px 8px;background:#374151;border:none;border-radius:4px;color:#9ca3af;cursor:pointer;">⎘ Copy</button>
+                </div>
+              </div>
+              <div style="padding:16px;overflow-x:auto;">
+                <table style="border-collapse:collapse;width:100%;font-family:monospace;font-size:13px;line-height:1.7;">
+                  <tr><td style="color:#4b5563;padding-right:16px;user-select:none;text-align:right;min-width:28px;">1</td><td style="color:#e5e7eb;"><span style="color:#c084fc;">import</span> { useState, useCallback } <span style="color:#c084fc;">from</span> <span style="color:#86efac;">'react'</span>;</td></tr>
+                  <tr><td style="color:#4b5563;padding-right:16px;user-select:none;text-align:right;">2</td><td style="color:#e5e7eb;">&nbsp;</td></tr>
+                  <tr><td style="color:#4b5563;padding-right:16px;user-select:none;text-align:right;">3</td><td style="color:#e5e7eb;"><span style="color:#c084fc;">interface</span> <span style="color:#67e8f9;">UseCounterOptions</span> {</td></tr>
+                  <tr><td style="color:#4b5563;padding-right:16px;user-select:none;text-align:right;">4</td><td style="color:#e5e7eb;">&nbsp;&nbsp;min?: <span style="color:#67e8f9;">number</span>;</td></tr>
+                  <tr><td style="color:#4b5563;padding-right:16px;user-select:none;text-align:right;">5</td><td style="color:#e5e7eb;">&nbsp;&nbsp;max?: <span style="color:#67e8f9;">number</span>;</td></tr>
+                  <tr><td style="color:#4b5563;padding-right:16px;user-select:none;text-align:right;">6</td><td style="color:#e5e7eb;">}</td></tr>
+                  <tr style="background:rgba(124,58,237,.15);"><td style="color:#4b5563;padding-right:16px;user-select:none;text-align:right;">7</td><td style="color:#e5e7eb;"><span style="color:#c084fc;">export function</span> <span style="color:#fde68a;">useCounter</span>(initial = 0, options: <span style="color:#67e8f9;">UseCounterOptions</span> = {}) {</td></tr>
+                  <tr style="background:rgba(124,58,237,.15);"><td style="color:#4b5563;padding-right:16px;user-select:none;text-align:right;">8</td><td style="color:#e5e7eb;">&nbsp;&nbsp;<span style="color:#c084fc;">const</span> { min = -Infinity, max = Infinity } = options;</td></tr>
+                  <tr><td style="color:#4b5563;padding-right:16px;user-select:none;text-align:right;">9</td><td style="color:#e5e7eb;">&nbsp;&nbsp;<span style="color:#c084fc;">const</span> [count, setCount] = useState(initial);</td></tr>
+                  <tr><td style="color:#4b5563;padding-right:16px;user-select:none;text-align:right;">10</td><td style="color:#e5e7eb;">&nbsp;&nbsp;<span style="color:#c084fc;">return</span> { count, inc, dec, reset };</td></tr>
+                  <tr><td style="color:#4b5563;padding-right:16px;user-select:none;text-align:right;">11</td><td style="color:#e5e7eb;">}</td></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="code-block"><code><span class="tag">&lt;CodeWidget</span>
+  <span class="attr">title</span>=<span class="str">"useCounter.ts"</span>
+  <span class="attr">language</span>=<span class="str">"typescript"</span>
+  <span class="attr">code</span>={tsSnippet}
+  <span class="attr">showCopy</span>
+  <span class="attr">showLineNumbers</span>
+  <span class="attr">highlightLines</span>={[7, 8]}
+  <span class="attr">maxHeight</span>=<span class="str">"360px"</span>
+<span class="tag">/&gt;</span>
+
+<span class="cmt">// Editable mode</span>
+<span class="tag">&lt;CodeWidget</span>
+  <span class="attr">language</span>=<span class="str">"python"</span>
+  <span class="attr">code</span>={code}
+  <span class="attr">editable</span>
+  <span class="attr">onChange</span>={setCode}
+<span class="tag">/&gt;</span>
+
+<span class="cmt">// With AI generation</span>
+<span class="tag">&lt;CodeWidget</span>
+  <span class="attr">language</span>=<span class="str">"typescript"</span>
+  <span class="attr">code</span>={snippet}
+  <span class="attr">onAiGenerate</span>={async (prompt) => {
+    <span class="kw">const</span> result = <span class="kw">await</span> generateSnippet(prompt);
+    setSnippet(result);
+  }}
+<span class="tag">/&gt;</span></code></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Props</div>
+        <table class="prop-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>code</code></td><td><code>string</code></td><td><code>''</code></td><td>Source code to display</td></tr>
+            <tr><td><code>language</code></td><td><code>CodeLanguage</code></td><td><code>'plaintext'</code></td><td>Language badge label</td></tr>
+            <tr><td><code>title</code></td><td><code>string</code></td><td>—</td><td>Filename shown in toolbar</td></tr>
+            <tr><td><code>showCopy</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Show copy button</td></tr>
+            <tr><td><code>showLineNumbers</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Show line number gutter</td></tr>
+            <tr><td><code>highlightLines</code></td><td><code>number[]</code></td><td><code>[]</code></td><td>Line numbers to highlight</td></tr>
+            <tr><td><code>maxHeight</code></td><td><code>string</code></td><td><code>'400px'</code></td><td>Scrollable max height</td></tr>
+            <tr><td><code>editable</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Turns block into a textarea</td></tr>
+            <tr><td><code>onChange</code></td><td><code>(code: string) => void</code></td><td>—</td><td>Called on edit (requires editable)</td></tr>
+            <tr><td><code>onAiGenerate</code></td><td><code>(prompt: string) => Promise&lt;void&gt;</code></td><td>—</td><td>Adds ✦ AI prompt bar above code</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+  </main>
+</div>
+
+<!-- Modal demos -->
+<div id="demo-modal" class="ww-backdrop hidden" onclick="if(event.target===this)this.classList.add('hidden')">
+  <div class="ww-modal" role="dialog" aria-modal="true" aria-labelledby="m1-title">
+    <div class="ww-modal__header">
+      <div>
+        <div class="ww-modal__title" id="m1-title">Confirm Action</div>
+        <div class="ww-modal__desc">This will permanently delete your data.</div>
+      </div>
+      <button class="ww-modal__close" onclick="document.getElementById('demo-modal').classList.add('hidden')" aria-label="Close">✕</button>
+    </div>
+    <div class="ww-modal__body">Are you sure you want to delete <strong>Project Alpha</strong>? This action cannot be undone.</div>
+    <div class="ww-modal__footer">
+      <button class="ww-btn ww-btn--ghost" onclick="document.getElementById('demo-modal').classList.add('hidden')">Cancel</button>
+      <button class="ww-btn ww-btn--danger" onclick="document.getElementById('demo-modal').classList.add('hidden')">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div id="demo-modal-simple" class="ww-backdrop hidden" onclick="if(event.target===this)this.classList.add('hidden')">
+  <div class="ww-modal" role="dialog" aria-modal="true">
+    <div class="ww-modal__body" style="padding-top:8px;">
+      <h3 style="margin-bottom:10px;">Custom Content</h3>
+      <p style="color:var(--gray-500);margin-bottom:20px;">Modal without title prop — header is hidden automatically.</p>
+      <button class="ww-btn ww-btn--primary" onclick="document.getElementById('demo-modal-simple').classList.add('hidden')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="ww-toast-stack" id="toast-stack"></div>
+
+<script>
+  // Navigation
+  document.querySelectorAll('.sidebar a').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const page = link.dataset.page;
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+      document.getElementById(page).classList.add('active');
+      link.classList.add('active');
+      window.scrollTo(0, 0);
+    });
+  });
+
+  // Keyboard close for modals
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.ww-backdrop:not(.hidden)').forEach(b => b.classList.add('hidden'));
+    }
+  });
+
+  // Toast demo
+  const icons = { success: '✓', warning: '⚠', danger: '✕', info: 'ℹ', default: 'ℹ' };
+  let toastId = 0;
+
+  function showToast(variant, title, message) {
+    const stack = document.getElementById('toast-stack');
+    const id = 'toast-' + (++toastId);
+    const el = document.createElement('div');
+    el.className = `ww-toast ww-toast--${variant}`;
+    el.id = id;
+    el.setAttribute('role', 'alert');
+    el.innerHTML = `
+      <span class="ww-toast__icon">${icons[variant] || 'ℹ'}</span>
+      <div class="ww-toast__body">
+        <div class="ww-toast__title">${title}</div>
+        <div class="ww-toast__msg">${message}</div>
+      </div>
+      <button class="ww-toast__close" onclick="removeToast('${id}')" aria-label="Dismiss">✕</button>
+    `;
+    stack.appendChild(el);
+    setTimeout(() => removeToast(id), 4000);
+  }
+
+  function removeToast(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  }
+
+  function clearToasts() {
+    document.getElementById('toast-stack').innerHTML = '';
+  }
+</script>
+</body>
+</html>

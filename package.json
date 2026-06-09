@@ -1,6 +1,6 @@
 {
   "name": "wealthywidgets",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "A collection of ready-to-use, customizable React UI components for rapid prototyping and web app development",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -9,7 +9,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "rollup -c rollup.config.mjs",
+    "build": "rollup -c rollup.config.mjs && node scripts/build-css.js",
     "dev": "rollup -c rollup.config.mjs -w",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
@@ -17,8 +17,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
+    "storybook": "echo \"Storybook not installed. Run: npm install storybook @storybook/react-vite && npx storybook dev\"",
+    "build-storybook": "echo \"Static docs site is in docs/index.html \u2014 no build needed\"",
     "clean": "rimraf dist",
     "format": "prettier --write \"src/**/*.{ts,tsx,scss}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,scss}\""
@@ -41,8 +41,10 @@
     "weather",
     "code-block",
     "ai-powered",
-    "widgets",
-    "ai"
+    "ai",
+    "badge",
+    "toast",
+    "notification"
   ],
   "author": "WealthyWidgets Contributors",
   "license": "MIT",
@@ -70,13 +72,11 @@
     "@types/react-dom": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^8.59.4",
     "@typescript-eslint/parser": "^8.59.4",
-    "autoprefixer": "^10.4.0",
     "eslint": "^8.0.0",
     "eslint-plugin-react": "^7.0.0",
     "eslint-plugin-react-hooks": "^4.0.0",
     "jest": "^29.0.0",
     "jest-environment-jsdom": "^29.0.0",
-    "postcss": "^8.4.0",
     "prettier": "^3.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
@@ -84,9 +84,7 @@
     "rollup": "^3.0.0",
     "rollup-plugin-dts": "^6.0.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-postcss": "^4.0.0",
-    "sass": "^1.69.0",
-    "tailwindcss": "^3.4.0",
+    "sass": "^1.80.0",
     "ts-jest": "^29.0.0",
     "tslib": "^2.6.0",
     "typescript": "^6.0.0"

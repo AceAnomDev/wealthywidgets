@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useId, CSSProperties } from 'react';
+import { useState, useRef, useCallback, useId, useEffect, CSSProperties } from 'react';
 import { TooltipProps } from './Tooltip.types';
 import './Tooltip.scss';
 
@@ -38,6 +38,14 @@ export function Tooltip({
   const showTimer = useRef<ReturnType<typeof setTimeout>>();
   const hideTimer = useRef<ReturnType<typeof setTimeout>>();
   const tooltipId = useId();
+
+  // FIX: clear both timers on unmount to prevent setState-after-unmount memory leak
+  useEffect(() => {
+    return () => {
+      clearTimeout(showTimer.current);
+      clearTimeout(hideTimer.current);
+    };
+  }, []);
 
   const show = useCallback(() => {
     if (disabled) return;

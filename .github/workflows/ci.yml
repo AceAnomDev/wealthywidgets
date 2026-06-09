@@ -2,10 +2,13 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
 
 jobs:
-  build:
+  ci:
+    name: Build & Test
     runs-on: ubuntu-latest
 
     steps:
@@ -14,7 +17,25 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
-      - run: npm install
+      - name: Install
+        run: npm ci
 
-      - run: npm run build
+      - name: Type check
+        run: npm run type-check
+
+      - name: Test
+        run: npm test -- --no-coverage
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify dist
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          for f in dist/index.js dist/index.esm.js dist/index.d.ts dist/styles.css; do
+            test -f "$f" || (echo "MISSING: $f" && exit 1)
+            echo "OK: $f ($(du -sh $f | cut -f1))"
+          done
+          echo "dist OK — v$VERSION"

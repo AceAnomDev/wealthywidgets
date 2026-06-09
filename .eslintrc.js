@@ -28,14 +28,13 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'warn',
     'no-console': 'warn',
   },
-  ignorePatterns: ['dist/', 'node_modules/', 'rollup.config.mjs', 'jest.config.js', 'tailwind.config.js'],
-};
-
-overrides: [
-  {
-    files: ['**/*.test.tsx', '**/*.test.ts', '**/*.stories.tsx'],
-    parserOptions: {
-      project: './tsconfig.test.json',
+  ignorePatterns: ['dist/', 'node_modules/', 'rollup.config.mjs', 'jest.config.js', 'jest.setup.ts', 'tailwind.config.js'],
+  overrides: [
+    {
+      files: ['**/*.test.tsx', '**/*.test.ts', '**/*.stories.tsx'],
+      parserOptions: {
+        project: './tsconfig.test.json',
+      },
     },
-  },
-],
+  ],
+};

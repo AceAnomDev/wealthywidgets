@@ -50,6 +50,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={classes}
+        type="button"
         disabled={disabled || loading}
         aria-busy={loading}
         {...rest}

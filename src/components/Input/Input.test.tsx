@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react';
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Input } from './Input';
 
 describe('Input', () => {
@@ -40,6 +41,11 @@ describe('Input', () => {
     expect(screen.getByRole('textbox')).toHaveAttribute('aria-invalid', 'true');
   });
 
+  it('is not aria-invalid when status is success', () => {
+    render(<Input status="success" />);
+    expect(screen.getByRole('textbox')).toHaveAttribute('aria-invalid', 'false');
+  });
+
   it('shows required asterisk', () => {
     render(<Input label="Email" required />);
     expect(document.querySelector('.ww-input__label-required')).toBeInTheDocument();
@@ -48,5 +54,56 @@ describe('Input', () => {
   it('renders left icon', () => {
     render(<Input leftIcon={<span data-testid="icon" />} />);
     expect(screen.getByTestId('icon')).toBeInTheDocument();
+  });
+
+  it('renders right element', () => {
+    render(<Input rightElement={<span data-testid="right" />} />);
+    expect(screen.getByTestId('right')).toBeInTheDocument();
+  });
+
+  it('is readOnly when readOnly prop is set', () => {
+    render(<Input readOnly />);
+    expect(screen.getByRole('textbox')).toHaveAttribute('readonly');
+  });
+
+  it('applies fullWidth class', () => {
+    const { container } = render(<Input fullWidth />);
+    expect(container.firstChild).toHaveClass('ww-input--full-width');
+  });
+
+  it('links hint to input via aria-describedby', () => {
+    render(<Input hint="Use 8+ characters" />);
+    const input = screen.getByRole('textbox');
+    const hint = screen.getByText('Use 8+ characters');
+    expect(input.getAttribute('aria-describedby')).toBe(hint.id);
+  });
+
+  it('links message to input via aria-describedby', () => {
+    render(<Input message="Invalid email" status="error" />);
+    const input = screen.getByRole('textbox');
+    const msg = screen.getByRole('alert');
+    expect(input.getAttribute('aria-describedby')).toContain(msg.id);
+  });
+
+  it('shows AI generate button when onAiGenerate is provided', () => {
+    render(<Input onAiGenerate={() => Promise.resolve('result')} />);
+    expect(screen.getByLabelText('Generate with AI')).toBeInTheDocument();
+  });
+
+  it('calls onAiGenerate and fires onChange with the result', async () => {
+    const onAiGenerate = jest.fn().mockResolvedValue('generated text');
+    const onChange = jest.fn();
+    render(
+      <Input
+        value="prompt"
+        onAiGenerate={onAiGenerate}
+        onChange={onChange}
+      />,
+    );
+    fireEvent.click(screen.getByLabelText('Generate with AI'));
+    await waitFor(() => expect(onChange).toHaveBeenCalled());
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const event = (onChange.mock.calls as [React.ChangeEvent<HTMLInputElement>][])[0][0];
+    expect(event.target.value).toBe('generated text');
   });
 });

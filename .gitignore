@@ -38,11 +38,9 @@ Thumbs.db
 # Storybook
 storybook-static/
 
-# Storybook
-storybook-static/
-
 # Prettier cache
 .prettiercache
 
 # Misc
 .npmrc
+scripts/styles-entry.scss

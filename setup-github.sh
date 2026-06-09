@@ -19,18 +19,23 @@ VISIBILITY="public"   # public | private
 echo "==> Initialising git repository…"
 git init
 git add .
-git commit -m "feat: initial commit — WealthyWidgets v1.0.0
+git commit -m "feat: initial commit — WealthyWidgets v2.1.0
 
-7 self-contained React UI components:
-- Button  (variants, sizes, loading, icons)
-- Card    (image, title, description, actions)
-- Input   (icon, hint, validation)
-- Modal   (Portal, Escape, scroll-lock)
-- Dropdown (search, multi-select, tags)
-- ProgressBar (status colours, label positions, striped)
-- Tooltip (4 placements, 3 variants, delays)
+12 self-contained React UI components:
+- Button        (variants, sizes, loading, icons)
+- Card          (image, title, description, actions)
+- Input         (icon, hint, validation, AI generation)
+- Modal         (Portal, Escape, scroll-lock, focus management)
+- Dropdown      (search, multi-select, keyboard-accessible tags)
+- ProgressBar   (status colours, label positions, striped, animated)
+- Tooltip       (4 placements, 3 variants, delays)
+- Badge         (status labels, dot indicators, pill shape)
+- Toast         (ToastProvider + useToast hook, 6 positions, auto-dismiss)
+- ActivityWidget (timeline, relative timestamps, AI feed generation)
+- WeatherWidget  (conditions, forecast, AI data generation)
+- CodeWidget     (syntax highlight, line numbers, editable, AI snippets)
 
-TypeScript strict · SCSS BEM · 59 Jest tests · GitHub Actions CI"
+TypeScript strict · SCSS BEM · 94 Jest tests · GitHub Actions CI"
 
 echo ""
 echo "==> Creating GitHub repository via GitHub CLI…"
@@ -60,4 +65,4 @@ echo ""
 echo "==> Next steps:"
 echo "  1. Replace YOUR_USERNAME in README.md and package.json"
 echo "  2. npm install  →  npm test  →  npm run build"
-echo "  3. To publish to npm manually: see README.md → Publishing"
+echo "  3. To publish to npm manually: npm run build && npm publish --access public"
